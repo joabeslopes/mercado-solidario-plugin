@@ -1,0 +1,7 @@
+{
+    "autoload": {
+        "psr-4": {
+            "Mercado_Solidario\\":"class"
+        }
+    }
+}
