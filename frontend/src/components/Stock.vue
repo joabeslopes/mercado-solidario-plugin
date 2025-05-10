@@ -1,12 +1,36 @@
 <script setup>
-import { ref, toRaw } from 'vue';
+import { ref } from 'vue';
 import ProductList from './ProductList.vue';
+
+const savedCart = localStorage.getItem('mercado-solidario-cart');
+const savedCartList = localStorage.getItem('mercado-solidario-cartList');
+const savedCartTotal = localStorage.getItem('mercado-solidario-cartTotal');
+
+const savedCartRef = savedCart == null ? {} : JSON.parse(savedCart);
+const savedCartListRef = savedCartList == null ? [] : JSON.parse(savedCartList);
+const savedCartTotalRef = savedCartTotal == null ? 0 : JSON.parse(savedCartTotal);
 
 const searchSku = ref('');
 const stock = ref({});
-const cart = ref({});
-const cartList = ref([]);
-const total = ref(0);
+const cart = ref( savedCartRef );
+const cartList = ref( savedCartListRef );
+const total = ref( savedCartTotalRef );
+
+function saveCartLocalStorage(){
+
+  localStorage.setItem('mercado-solidario-cart', JSON.stringify(cart.value));
+  localStorage.setItem('mercado-solidario-cartList', JSON.stringify(cartList.value));
+  localStorage.setItem('mercado-solidario-cartTotal', JSON.stringify(total.value));
+
+};
+
+function clearCartLocalStorage(){
+
+  localStorage.removeItem('mercado-solidario-cart');
+  localStorage.removeItem('mercado-solidario-cartList');
+  localStorage.removeItem('mercado-solidario-cartTotal');
+
+};
 
 function addProd(sku){
 
@@ -31,6 +55,8 @@ function addProd(sku){
   total.value += newProduct.price;
 
   searchSku.value = '';
+  
+  saveCartLocalStorage();
 
 };
 
@@ -46,6 +72,8 @@ function subProduct(sku){
   } else {
     deleteProd(sku);
   };
+
+  saveCartLocalStorage();
 
 };
 
@@ -67,11 +95,17 @@ function deleteProd(sku){
 
   cartList.value.splice(listIndex, 1);
 
+  saveCartLocalStorage();
+
 };
 
 function sendCart(){
 
-  console.log(toRaw(cart.value));
+  console.log(JSON.stringify(cart.value));
+  cart.value = {};
+  cartList.value = [];
+  total.value = 0;
+  clearCartLocalStorage();
 
 };
 
@@ -81,13 +115,13 @@ fetch( '/wp-json/mercado-solidario/v1/stock'
 ).then(
   (data) => {
     stock.value = data;
-    console.log(data);
   }
 ).catch(
   () => alert('Erro ao buscar produtos')
 );
 
 </script>
+
 
 <template>
 
@@ -118,7 +152,6 @@ fetch( '/wp-json/mercado-solidario/v1/stock'
   </div>
 
 </div>
-
 
 
 </template>
