@@ -70,8 +70,10 @@ function addProd(sku){
   };
 
   const newProduct = {
-    ...prodSearch,
-    quantity: 1
+    'id': prodSearch.id,
+    'name': prodSearch.name,
+    'price': prodSearch.price,
+    'quantity': 1
   };
 
   if (cart.value.products[sku]) { 
