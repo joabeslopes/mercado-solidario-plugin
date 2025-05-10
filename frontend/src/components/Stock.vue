@@ -2,33 +2,62 @@
 import { ref } from 'vue';
 import ProductList from './ProductList.vue';
 
-const savedCart = localStorage.getItem('mercado-solidario-cart');
-const savedCartList = localStorage.getItem('mercado-solidario-cartList');
-const savedCartTotal = localStorage.getItem('mercado-solidario-cartTotal');
-
-const savedCartRef = savedCart == null ? {} : JSON.parse(savedCart);
-const savedCartListRef = savedCartList == null ? [] : JSON.parse(savedCartList);
-const savedCartTotalRef = savedCartTotal == null ? 0 : JSON.parse(savedCartTotal);
+const emptyCart = {
+  'products': {},
+  'list': [],
+  'total': 0
+};
 
 const searchSku = ref('');
 const stock = ref({});
-const cart = ref( savedCartRef );
-const cartList = ref( savedCartListRef );
-const total = ref( savedCartTotalRef );
+const cart = ref({});
+
+function setStock(){
+
+  const savedStock = sessionStorage.getItem('mercado-solidario-stock');
+
+  if (savedStock != null) {
+    stock.value = JSON.parse(savedStock);
+  } else {
+
+    fetch( '/wp-json/mercado-solidario/v1/stock'
+    ).then(
+      (data) => data.json()
+    ).then(
+      (data) => {
+        stock.value = data;
+        sessionStorage.setItem('mercado-solidario-stock', JSON.stringify(data));
+      }
+    ).catch(
+      () => alert('Erro ao buscar produtos')
+    );
+  };
+
+};
+
+function setCart(){
+
+  const savedCart = localStorage.getItem('mercado-solidario-cart');
+  cart.value = savedCart == null ? structuredClone(emptyCart) : JSON.parse(savedCart);
+
+};
+
+function clearCart(){
+
+  cart.value = structuredClone(emptyCart);
+  clearCartLocalStorage();
+
+};
 
 function saveCartLocalStorage(){
 
   localStorage.setItem('mercado-solidario-cart', JSON.stringify(cart.value));
-  localStorage.setItem('mercado-solidario-cartList', JSON.stringify(cartList.value));
-  localStorage.setItem('mercado-solidario-cartTotal', JSON.stringify(total.value));
 
 };
 
 function clearCartLocalStorage(){
 
   localStorage.removeItem('mercado-solidario-cart');
-  localStorage.removeItem('mercado-solidario-cartList');
-  localStorage.removeItem('mercado-solidario-cartTotal');
 
 };
 
@@ -45,14 +74,14 @@ function addProd(sku){
     quantity: 1
   };
 
-  if (cart.value[sku]) { 
-    cart.value[sku].quantity += 1;
+  if (cart.value.products[sku]) { 
+    cart.value.products[sku].quantity += 1;
   } else {
-    cart.value[sku] = newProduct;
-    cartList.value.unshift(sku);
+    cart.value.products[sku] = newProduct;
+    cart.value.list.unshift(sku);
   };
 
-  total.value += newProduct.price;
+  cart.value.total += newProduct.price;
 
   searchSku.value = '';
   
@@ -62,13 +91,13 @@ function addProd(sku){
 
 function subProduct(sku){
 
-  if (!cart.value[sku]){
+  if (!cart.value.products[sku]){
     return false;
   }
 
-  if (cart.value[sku].quantity > 1){
-    cart.value[sku].quantity -= 1;
-    total.value -= cart.value[sku].price;
+  if (cart.value.products[sku].quantity > 1){
+    cart.value.products[sku].quantity -= 1;
+    cart.value.total -= cart.value.products[sku].price;
   } else {
     deleteProd(sku);
   };
@@ -79,21 +108,21 @@ function subProduct(sku){
 
 function deleteProd(sku){
 
-  if (!cart.value[sku]){
+  if (!cart.value.products[sku]){
     return false;
   }
 
-  const prod = cart.value[sku];
+  const prod = cart.value.products[sku];
 
   const prodValue = prod.quantity * prod.price;
 
-  total.value -= prodValue;
+  cart.value.total -= prodValue;
 
-  delete cart.value[sku];
+  delete cart.value.products[sku];
 
-  const listIndex = cartList.value.indexOf(sku);
+  const listIndex = cart.value.list.indexOf(sku);
 
-  cartList.value.splice(listIndex, 1);
+  cart.value.list.splice(listIndex, 1);
 
   saveCartLocalStorage();
 
@@ -101,24 +130,17 @@ function deleteProd(sku){
 
 function sendCart(){
 
-  console.log(JSON.stringify(cart.value));
-  cart.value = {};
-  cartList.value = [];
-  total.value = 0;
-  clearCartLocalStorage();
+  const cartJson = JSON.stringify(cart.value.products);
+
+  console.log(cartJson);
+
+  clearCart();
 
 };
 
-fetch( '/wp-json/mercado-solidario/v1/stock'
-).then(
-  (data) => data.json()
-).then(
-  (data) => {
-    stock.value = data;
-  }
-).catch(
-  () => alert('Erro ao buscar produtos')
-);
+
+setStock();
+setCart();
 
 </script>
 
@@ -143,11 +165,11 @@ fetch( '/wp-json/mercado-solidario/v1/stock'
 
     <input v-model="searchSku" @keyup.enter="addProd(searchSku)" />
 
-    <p>Total: {{ total }}</p>
+    <p>Total: {{ cart.total }}</p>
 
     <button @click="sendCart()">Finalizar</button>
 
-    <ProductList :cart="cart" :cartList="cartList" @sub="subProduct" @delete="deleteProd"/>
+    <ProductList :cart="cart" @sub="subProduct" @delete="deleteProd"/>
 
   </div>
 

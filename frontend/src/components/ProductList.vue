@@ -2,8 +2,7 @@
 import Product from './Product.vue';
 
 const props = defineProps({
-    cart: Object,
-    cartList: Array
+    cart: Object
 });
 
 </script>
@@ -11,10 +10,10 @@ const props = defineProps({
 
 <template>
 
-<div v-for="sku in cartList">
+<div v-for="sku in cart.list">
     <div class="ms-card">
 
-        <Product :product="cart[sku]" />
+        <Product :product="cart.products[sku]" />
 
         <button @click="$emit('sub', sku)">-</button>
         <button @click="$emit('delete',sku)">Delete</button>
