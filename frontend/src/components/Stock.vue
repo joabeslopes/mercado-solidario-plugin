@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import ProductList from './ProductList.vue';
+import { get } from '../myApiClient';
 
 const emptyCart = {
   'products': {},
@@ -12,7 +13,7 @@ const searchSku = ref('');
 const stock = ref({});
 const cart = ref({});
 
-function setStock(){
+async function setStock(){
 
   const savedStock = sessionStorage.getItem('mercado-solidario-stock');
 
@@ -20,17 +21,15 @@ function setStock(){
     stock.value = JSON.parse(savedStock);
   } else {
 
-    fetch( '/wp-json/mercado-solidario/v1/stock'
-    ).then(
-      (data) => data.json()
-    ).then(
-      (data) => {
-        stock.value = data;
-        sessionStorage.setItem('mercado-solidario-stock', JSON.stringify(data));
-      }
-    ).catch(
-      () => alert('Erro ao buscar produtos')
-    );
+    const response = await get('/stock');
+
+    if (response != null){
+      stock.value = response;
+      sessionStorage.setItem('mercado-solidario-stock', JSON.stringify(response));
+    } else {
+      alert('Erro ao buscar produtos');
+    };
+
   };
 
 };
