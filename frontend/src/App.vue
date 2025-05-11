@@ -4,8 +4,8 @@
       <RouterLink to="/">
         <a> Caixa </a>
       </RouterLink>
-      <RouterLink to="/people">
-        <a> Pessoas </a>
+      <RouterLink to="/familys">
+        <a> Famílias </a>
       </RouterLink>
     </nav>
 

@@ -7,23 +7,23 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class People {
+class Families {
 
     public static function get_all(){
 
-        $people = [
+        $families = [
             [ 
                 'id' => 1,
-                'name' => 'Joabe',
-                'age' => 23
+                'main_person' => 'Joabe',
+                'balance' => 200
             ],
             [ 
                 'id' => 2,
-                'name' => 'Luiz',
-                'age' => 15
+                'main_person' => 'Luiz',
+                'balance' => 150
             ],
         ];
 
-        return $people;
+        return $families;
     }
 }

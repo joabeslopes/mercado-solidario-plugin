@@ -8,14 +8,14 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class People {
+class Families {
 
-    public string $base_route = 'people';
-    public Controller\People $controller;
+    public string $base_route = 'families';
+    public Controller\Families $controller;
 
     public function __construct(){
 
-        $this->controller = new Controller\People();
+        $this->controller = new Controller\Families();
         add_action( 'rest_api_init', [ $this, 'register_get' ] );
 
     }

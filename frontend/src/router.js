@@ -1,11 +1,11 @@
 import { createMemoryHistory, createRouter } from 'vue-router';
 
 import Stock from './components/Stock.vue';
-import People from './components/People.vue';
+import Family from './components/Family.vue';
 
 const routes = [
   { path: '/', component: Stock },
-  { path: '/people', component: People },
+  { path: '/familys', component: Family },
 ];
 
 export const router = createRouter({

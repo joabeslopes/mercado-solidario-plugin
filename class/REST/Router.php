@@ -13,7 +13,7 @@ class Router{
 
         new Stock();
 
-        new People();
+        new Families();
 
     }
 

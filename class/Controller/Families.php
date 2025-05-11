@@ -8,19 +8,19 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class People {
+class Families {
 
-    public Model\People $model;
+    public Model\Families $model;
 
     public function __construct(){
-        $this->model = new Model\People();
+        $this->model = new Model\Families();
     }
 
     public function get_all(){
 
-        $people = $this->model->get_all();
+        $families = $this->model->get_all();
 
-        return $people;
+        return $families;
 
     }
 
