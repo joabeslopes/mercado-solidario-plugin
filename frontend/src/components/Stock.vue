@@ -180,7 +180,7 @@ setCart();
 
     <button @click="sendCart()">Finalizar</button>
 
-    <ProductList :cart="cart" @sub="subProduct" @delete="deleteProd"/>
+    <ProductList :cart="cart" @sub="subProduct" @del="deleteProd"/>
 
   </div>
 
