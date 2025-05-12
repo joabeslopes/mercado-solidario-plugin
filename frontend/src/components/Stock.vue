@@ -12,6 +12,7 @@ const emptyCart = {
 const searchSku = ref('');
 const stock = ref({});
 const cart = ref({});
+const lastSku = ref('');
 
 async function setStock(){
 
@@ -45,6 +46,7 @@ function clearCart(){
 
   cart.value = structuredClone(emptyCart);
   clearCartLocalStorage();
+  lastSku.value = '';
 
 };
 
@@ -87,6 +89,8 @@ function addProd(sku){
   searchSku.value = '';
   
   saveCartLocalStorage();
+
+  lastSku.value = sku;
 
 };
 
@@ -162,12 +166,9 @@ setCart();
   <div class="stock">
     <div v-for="(prod, sku) in stock">
 
-      <div v-if="prod.image">
-        <a class="stockProd" @click="addProd(sku)">
-          <img :src="prod.image" width="100px" height="100px">
-        </a>
+      <div v-if="prod.image" :key="sku" class="prodImg" @click="addProd(sku)">
+        <img :src="prod.image" :class="{'selected': lastSku == sku}" width="100px" height="100px">
       </div>
-
     </div>
   </div>
 
@@ -195,12 +196,12 @@ setCart();
   gap: 20px;
 }
 
-.stockProd:hover{
+.prodImg:hover{
   cursor: pointer;
 }
 
 .stock{
-  background-color: #505053;
+  background-color: black;
   border-radius: 12px;
   box-sizing: border-box;
   padding: 20px;
@@ -214,7 +215,8 @@ setCart();
 }
 
 .cart{
-  background-color: #9b9b9c;
+  background-color: black;
+  color: white;
   box-sizing: border-box;
   border-radius: 12px;
   padding: 20px;
@@ -227,6 +229,10 @@ setCart();
 }
 
 input:focus{
+  outline: 3px solid greenyellow;
+}
+
+.selected{
   outline: 3px solid greenyellow;
 }
 
