@@ -131,9 +131,18 @@ function deleteProd(sku){
 
 function sendCart(){
 
-  const cartJson = JSON.stringify(cart.value.products);
+  const finalCart = [];
 
-  console.log(cartJson);
+  for (const [sku, prod] of Object.entries(cart.value.products)) {
+    const newProd = {
+      'id': prod.id,
+      'quantity': prod.quantity
+    };
+
+    finalCart.push(newProd);
+  };
+
+  console.log(JSON.stringify(finalCart));
 
   clearCart();
 
@@ -215,6 +224,10 @@ setCart();
   flex-flow: column;
   height: auto;
   align-items: center;
+}
+
+input:focus{
+  outline: 3px solid greenyellow;
 }
 
 </style>
