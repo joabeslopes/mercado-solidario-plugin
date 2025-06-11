@@ -4,9 +4,7 @@ namespace Mercado_Solidario\REST;
 use Mercado_Solidario\Model;
 
 // don't call the file directly
-if ( ! defined( 'ABSPATH' ) ) {
-    exit;
-}
+defined( 'ABSPATH' ) || die;
 
 class Families {
 

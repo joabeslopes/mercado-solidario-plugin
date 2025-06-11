@@ -3,9 +3,7 @@
 namespace Mercado_Solidario\Pages;
 
 // don't call the file directly
-if ( ! defined( 'ABSPATH' ) ) {
-    exit;
-}
+defined( 'ABSPATH' ) || die;
 
 class Main_Page {
 

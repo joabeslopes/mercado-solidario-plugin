@@ -4,9 +4,7 @@ namespace Mercado_Solidario\Model;
 use WC_Product_Query;
 
 // don't call the file directly
-if ( ! defined( 'ABSPATH' ) ) {
-    exit;
-}
+defined( 'ABSPATH' ) || die;
 
 class Checkout {
 
