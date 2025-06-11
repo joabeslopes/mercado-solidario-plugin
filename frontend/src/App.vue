@@ -1,10 +1,10 @@
 <template>
   <div class="app">
     <nav>
-      <RouterLink to="/">
+      <RouterLink to="/checkout">
         <a> Caixa </a>
       </RouterLink>
-      <RouterLink to="/familys">
+      <RouterLink to="/families">
         <a> Famílias </a>
       </RouterLink>
     </nav>

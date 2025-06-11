@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Families {
 
-    public static function get_all(){
+    public function get_all_families(): array {
 
         $families = [
             [ 
@@ -26,4 +26,9 @@ class Families {
 
         return $families;
     }
+
+    public function get_families_permission(): bool {
+        return true;
+    }
+
 }

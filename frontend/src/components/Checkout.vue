@@ -22,7 +22,7 @@ async function setStock(){
     stock.value = JSON.parse(savedStock);
   } else {
 
-    const response = await get('/stock');
+    const response = await get('/checkout/stock');
 
     if (response != null){
       stock.value = response;

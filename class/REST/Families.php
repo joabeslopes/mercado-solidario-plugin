@@ -1,7 +1,7 @@
 <?php
 
 namespace Mercado_Solidario\REST;
-use Mercado_Solidario\Controller;
+use Mercado_Solidario\Model;
 
 // don't call the file directly
 if ( ! defined( 'ABSPATH' ) ) {
@@ -11,11 +11,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Families {
 
     public string $base_route = 'families';
-    public Controller\Families $controller;
+    public Model\Families $model;
 
     public function __construct(){
 
-        $this->controller = new Controller\Families();
+        $this->model = new Model\Families();
         add_action( 'rest_api_init', [ $this, 'register_get' ] );
 
     }
@@ -27,8 +27,8 @@ class Families {
             $this->base_route,
             [
             'methods' => 'GET',
-            'callback' => [ $this->controller, 'get_all' ],
-            'permission_callback' => [ $this->controller, 'get_people_permission' ],
+            'callback' => [ $this->model, 'get_all_families' ],
+            'permission_callback' => [ $this->model, 'get_families_permission' ],
             ]
         );
 
