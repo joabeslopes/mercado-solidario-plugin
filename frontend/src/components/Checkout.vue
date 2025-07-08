@@ -4,8 +4,8 @@ import ProductList from './ProductList.vue';
 import { get } from '../myApiClient';
 
 const emptyCart = {
-  'products': {},
-  'list': [],
+  'productSku': {},
+  'productList': [],
   'total': 0
 };
 
@@ -67,7 +67,7 @@ function addProd(sku){
   const prodSearch = stock.value[sku];
 
   if (!prodSearch){
-    return false;
+    return null;
   };
 
   const newProduct = {
@@ -77,14 +77,14 @@ function addProd(sku){
     'quantity': 1
   };
 
-  if (cart.value.products[sku]) { 
-    cart.value.products[sku].quantity += 1;
+  if (cart.value.productSku[sku]) { 
+    cart.value.productSku[sku].quantity += 1;
   } else {
-    cart.value.products[sku] = newProduct;
-    cart.value.list.unshift(sku);
+    cart.value.productSku[sku] = newProduct;
+    cart.value.productList.unshift(sku);
   };
 
-  cart.value.total += newProduct.price;
+  cart.value.total += prodSearch.price;
 
   searchSku.value = '';
   
@@ -96,13 +96,15 @@ function addProd(sku){
 
 function subProduct(sku){
 
-  if (!cart.value.products[sku]){
-    return false;
+  const prodSearch = cart.value.productSku[sku];
+
+  if (!prodSearch){
+    return null;
   }
 
-  if (cart.value.products[sku].quantity > 1){
-    cart.value.products[sku].quantity -= 1;
-    cart.value.total -= cart.value.products[sku].price;
+  if (prodSearch.quantity > 1){
+    cart.value.productSku[sku].quantity -= 1;
+    cart.value.total -= prodSearch.price;
   } else {
     deleteProd(sku);
   };
@@ -113,21 +115,19 @@ function subProduct(sku){
 
 function deleteProd(sku){
 
-  if (!cart.value.products[sku]){
-    return false;
+  const prodSearch = cart.value.productSku[sku];
+
+  if (!prodSearch){
+    return null;
   }
 
-  const prod = cart.value.products[sku];
+  cart.value.total -= prodSearch.quantity * prodSearch.price;
 
-  const prodValue = prod.quantity * prod.price;
+  delete cart.value.productSku[sku];
 
-  cart.value.total -= prodValue;
+  const prodIndex = cart.value.productList.indexOf(sku);
 
-  delete cart.value.products[sku];
-
-  const listIndex = cart.value.list.indexOf(sku);
-
-  cart.value.list.splice(listIndex, 1);
+  cart.value.productList.splice(prodIndex, 1);
 
   saveCartLocalStorage();
 
@@ -135,18 +135,20 @@ function deleteProd(sku){
 
 function sendCart(){
 
-  const finalCart = [];
+  const userCart = [];
 
-  for (const [sku, prod] of Object.entries(cart.value.products)) {
+  for ( const [sku, prod] of Object.entries(cart.value.productSku) ) {
     const newProd = {
       'id': prod.id,
       'quantity': prod.quantity
     };
 
-    finalCart.push(newProd);
+    userCart.push(newProd);
   };
 
-  console.log(JSON.stringify(finalCart));
+  const userCartJson = JSON.stringify(userCart);
+
+  console.log( userCartJson );
 
   clearCart();
 

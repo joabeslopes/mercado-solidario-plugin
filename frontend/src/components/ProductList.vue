@@ -17,8 +17,8 @@ const props = defineProps({
             <th></th>
         </thead>
         <tbody>
-            <tr v-for="sku in cart.list">
-                <Product :key="sku" :product="cart.products[sku]" @sub="$emit('sub', sku)" @del="$emit('del', sku)" />
+            <tr v-for="sku in cart.productList">
+                <Product :key="sku" :product="cart.productSku[sku]" @sub="$emit('sub', sku)" @del="$emit('del', sku)" />
             </tr>
         </tbody>
     </table>
