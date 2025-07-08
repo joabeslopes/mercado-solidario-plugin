@@ -234,11 +234,11 @@ input {
 }
 
 input:focus{
-  outline: 3px solid greenyellow;
+  outline: 5px solid greenyellow;
 }
 
 .selected{
-  outline: 3px solid greenyellow;
+  outline: 5px solid greenyellow;
 }
 
 </style>
