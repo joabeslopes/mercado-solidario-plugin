@@ -8,10 +8,10 @@ const props = defineProps({
 
 <template>
 
-    <td class="produto">{{ product.name }}</td>
-    <td class="quantidade">{{ product.quantity }}</td>
-    <td class="preco">R$ {{ product.price }}</td>
-    <td class="sub">
+    <td>{{ product.name }}</td>
+    <td>{{ product.quantity }}</td>
+    <td>R$ {{ product.price }}</td>
+    <td>
         <button @click="$emit('sub')">-</button>
     </td>
     <td class="del">
@@ -19,27 +19,3 @@ const props = defineProps({
     </td>
 
 </template>
-
-<style scoped>
-
-.produto{
-    width: 30%;
-}
-
-.quantidade{
-    width: 15%;
-}
-
-.preco{
-    width: 15%;
-}
-
-.sub{
-    width: 10%;
-}
-
-.del{
-    width: 10%;
-}
-
-</style>

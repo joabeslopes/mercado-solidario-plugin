@@ -5,7 +5,7 @@ import { get } from '../myApiClient';
 
 const emptyCart = {
   'productSku': {},
-  'productList': [],
+  'skuList': [],
   'total': 0
 };
 
@@ -81,7 +81,7 @@ function addProd(sku){
     cart.value.productSku[sku].quantity += 1;
   } else {
     cart.value.productSku[sku] = newProduct;
-    cart.value.productList.unshift(sku);
+    cart.value.skuList.unshift(sku);
   };
 
   cart.value.total += prodSearch.price;
@@ -125,9 +125,9 @@ function deleteProd(sku){
 
   delete cart.value.productSku[sku];
 
-  const prodIndex = cart.value.productList.indexOf(sku);
+  const prodIndex = cart.value.skuList.indexOf(sku);
 
-  cart.value.productList.splice(prodIndex, 1);
+  cart.value.skuList.splice(prodIndex, 1);
 
   saveCartLocalStorage();
 
