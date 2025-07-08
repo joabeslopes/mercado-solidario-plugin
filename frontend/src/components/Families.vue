@@ -4,7 +4,7 @@ import { get } from '../myApiClient';
 
 const families = ref({});
 
-async function setFamilies(){
+async function getFamilies(){
 
   const savedFamilies = sessionStorage.getItem('mercado-solidario-families');
 
@@ -25,14 +25,14 @@ async function setFamilies(){
 
 };
 
-setFamilies();
+getFamilies();
 
 </script>
 
 <template>
   <h1>Famílias</h1>
 
-  <div class="card">
+  <div>
     <div v-for="family in families">
 
       <p>

@@ -16,14 +16,12 @@
 
 <style scoped>
 .app {
-  align-items: center;
   display: flex;
   flex-direction: column;
-  width: 100%;
 }
 
 nav{
-  background-image: linear-gradient(to bottom right, purple, #f047f0);
+  background-color:rgb(27, 134, 158);
   width: 100%;
   height: 60px;
   display: flex;

@@ -14,7 +14,7 @@ const stock = ref({});
 const cart = ref({});
 const lastSku = ref('');
 
-async function setStock(){
+async function getStock(){
 
   const savedStock = sessionStorage.getItem('mercado-solidario-stock');
 
@@ -35,7 +35,7 @@ async function setStock(){
 
 };
 
-function setCart(){
+function getCart(){
 
   const savedCart = localStorage.getItem('mercado-solidario-cart');
   cart.value = savedCart == null ? structuredClone(emptyCart) : JSON.parse(savedCart);
@@ -153,8 +153,8 @@ function sendCart(){
 };
 
 
-setStock();
-setCart();
+getStock();
+getCart();
 
 </script>
 
@@ -193,7 +193,7 @@ setCart();
 
 .page{
   display: flex;
-  gap: 20px;
+  gap: 10%;
 }
 
 .prodImg:hover{
@@ -210,7 +210,7 @@ setCart();
   display: flex;
   flex: 50%;
   flex-flow: row wrap;
-  gap: 10px;
+  gap: 5px;
   align-items: flex-start;
 }
 
@@ -226,6 +226,11 @@ setCart();
   flex-flow: column;
   height: auto;
   align-items: center;
+}
+
+input {
+  width: 50%;
+  height: 30px;
 }
 
 input:focus{

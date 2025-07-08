@@ -28,7 +28,6 @@ const props = defineProps({
 
 table{
     border-collapse: collapse;
-    width: 100%;
     text-align: left;
     margin-top: 15px;
 }
