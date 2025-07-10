@@ -167,8 +167,7 @@ getCart();
 
   <div class="stock">
     <div v-for="(prod, sku) in stock">
-
-      <div v-if="prod.image" :key="sku" class="prodImg" @click="addProd(sku)">
+      <div :key="sku" class="prodImg" @click="addProd(sku)">
         <img :src="prod.image" :class="{'selected': lastSku == sku}" width="100px" height="100px">
       </div>
     </div>

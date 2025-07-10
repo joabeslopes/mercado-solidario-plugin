@@ -28,14 +28,20 @@ class Checkout {
             foreach ($products as $product) {
 
                 $sku = $product->get_sku();
+
+                $image_id = $product->get_image_id();
+                $image_url = $image_id  ? wp_get_attachment_image_url( $image_id ) 
+                                        : 
+                                        MERCADO_SOLIDARIO_URL."/frontend/woocommerce-placeholder.png";
+
                 $stock[$sku] = [
                     'id' => $product->get_id(),
                     'name' => $product->get_name(),
-                    'price' => (int)$product->get_price(),
-                    'image' => wp_get_attachment_image_url(  $product->get_image_id() )
+                    'price' => (float)$product->get_price(),
+                    'image' => $image_url
                 ];
-            }
-        }
+            };
+        };
 
         return $stock;
 
