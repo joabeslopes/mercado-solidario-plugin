@@ -11,7 +11,7 @@ class Main_Page {
     private string $menu_title = 'Mercado Solidario';
     private string $capability = 'manage_woocommerce';
     private string $menu_slug = 'mercado-solidario';
-    private string $icon_url = '';
+    private string $icon_url = MERCADO_SOLIDARIO_URL.'/frontend/assets/icon-mercado-solidario.svg';
 
     public function __construct() {
         add_action('admin_menu',[$this,'create_page']);
