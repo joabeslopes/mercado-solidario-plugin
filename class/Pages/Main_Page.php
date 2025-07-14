@@ -40,7 +40,7 @@ class Main_Page {
     public function print_settings(){
 
         $settings = [
-            'nonce' => wp_create_nonce( MERCADO_SOLIDARIO_URL )
+            'nonce' => wp_create_nonce( 'wp_rest' )
         ];
 
         $settings_json = json_encode($settings);

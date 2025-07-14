@@ -2,11 +2,16 @@
 
 namespace Mercado_Solidario\Model;
 use WC_Product_Query;
+use WP_REST_Request;
 
 // don't call the file directly
 defined( 'ABSPATH' ) || die;
 
 class Checkout {
+
+    public function checkout_permission(): bool{
+        return current_user_can( 'manage_woocommerce' );
+    }
 
     public function get_stock(): array {
 
@@ -47,8 +52,44 @@ class Checkout {
 
     }
 
-    public function get_stock_permission(): bool{
-        return true;
+    public function post_cart( WP_REST_Request $request ) {
+
+        $status = 200;
+        $messages = [];
+
+        $cart = $request['cart'];
+
+        if (!$cart) {
+            $status = 400;
+        } else {
+            foreach ($cart as $cartProd) {
+
+                $args = [
+                    'sku' => $cartProd['sku'],
+                    'limit' => 1
+                ];
+
+                $query = new WC_Product_Query($args);
+                $product = $query->get_products()[0];
+
+                if ($product){
+                    $quantity = $product->get_stock_quantity() - $cartProd['quantity'];
+                    if ($quantity < 0) {
+                        $status = 400;
+                        $messages[] = $product->get_name() . ' sem estoque';
+                    };
+
+                } else {
+                    $status = 400;
+                    $messages[] = $cartProd['sku'] . ' não existe';
+                }
+            }
+        }
+
+        return [ 
+            'status'  => $status,
+            'data' => $messages
+        ];
     }
 
 }

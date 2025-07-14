@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import ProductList from './ProductList.vue';
-import { get } from '../myApiClient';
+import { get, post } from '../myApiClient';
 
 const emptyCart = {
   'productSku': {},
@@ -13,6 +13,15 @@ const searchSku = ref('');
 const stock = ref({});
 const cart = ref({});
 const lastSku = ref('');
+
+const popupcss = `
+        .popup-title {
+          font-size: 30px;
+        }
+        .popup-body p {
+          font-size: 20px;
+        }
+      `;
 
 async function getStock(){
 
@@ -133,44 +142,56 @@ function deleteProd(sku){
 
 };
 
-function sendCart(){
+async function sendCart(){
 
   if (cart.value.total == 0){
     return null;
   }
 
-  const userCart = [];
+  const userCart = cart.value.skuList.map(
+    (sku) => {
+      const prod = cart.value.productSku[sku];
+      return {
+        'sku': sku, 
+        'quantity': prod.quantity
+      };
+    }
+  );
 
-  for ( const [sku, prod] of Object.entries(cart.value.productSku) ) {
-    const newProd = {
-      'sku': sku,
-      'quantity': prod.quantity
-    };
-
-    userCart.push(newProd);
+  const request = {
+    'cart': userCart
   };
 
-  const userCartJson = JSON.stringify(userCart);
+  const response = await post( '/checkout/cart', request );
 
-  const sucessoPopup = new Popup({
-    id: "sucesso-compra",
-    title: "Sucesso",
-    content: "Sucesso na efetuação da compra",
-    showImmediately: true,
-    hideCallback: () => {
-        document.querySelectorAll(".sucesso-compra").forEach(e => e.remove());
-    },
-    css: `
-      .popup-title {
-        font-size: 30px;
-      }
-      .popup-body p {
-        font-size: 20px;
-      }
-    `
-  });
+  if (response.status == 200) {
+    new Popup({
+        id: "sucesso-compra",
+        title: "Sucesso",
+        content: "Compra efetuada",
+        showImmediately: true,
+        hideCallback: () => {
+            document.querySelectorAll(".sucesso-compra").forEach(e => e.remove());
+        },
+        css: popupcss
+    });
 
-  clearCart();
+    clearCart();
+
+  } else {
+
+    new Popup({
+        id: "erro-compra",
+        title: "Erro",
+        content: "Compra não efetuada",
+        showImmediately: true,
+        hideCallback: () => {
+            document.querySelectorAll(".erro-compra").forEach(e => e.remove());
+        },
+        css: popupcss
+    });
+
+  };
 
 };
 
