@@ -143,7 +143,7 @@ function sendCart(){
 
   for ( const [sku, prod] of Object.entries(cart.value.productSku) ) {
     const newProd = {
-      'id': prod.id,
+      'sku': sku,
       'quantity': prod.quantity
     };
 
