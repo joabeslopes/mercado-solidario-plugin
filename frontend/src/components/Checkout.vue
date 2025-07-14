@@ -135,6 +135,10 @@ function deleteProd(sku){
 
 function sendCart(){
 
+  if (cart.value.total == 0){
+    return null;
+  }
+
   const userCart = [];
 
   for ( const [sku, prod] of Object.entries(cart.value.productSku) ) {
@@ -148,7 +152,23 @@ function sendCart(){
 
   const userCartJson = JSON.stringify(userCart);
 
-  console.log( userCartJson );
+  const sucessoPopup = new Popup({
+    id: "sucesso-compra",
+    title: "Sucesso",
+    content: "Sucesso na efetuação da compra",
+    showImmediately: true,
+    hideCallback: () => {
+        document.querySelectorAll(".sucesso-compra").forEach(e => e.remove());
+    },
+    css: `
+      .popup-title {
+        font-size: 30px;
+      }
+      .popup-body p {
+        font-size: 20px;
+      }
+    `
+  });
 
   clearCart();
 
@@ -242,4 +262,7 @@ input:focus{
   outline: 5px solid greenyellow;
 }
 
+p {
+  font-size: 15px;
+}
 </style>

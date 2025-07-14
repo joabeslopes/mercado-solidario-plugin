@@ -32,7 +32,7 @@ class Checkout {
                 $image_id = $product->get_image_id();
                 $image_url = $image_id  ? wp_get_attachment_image_url( $image_id ) 
                                         : 
-                                        MERCADO_SOLIDARIO_URL."/frontend/woocommerce-placeholder.png";
+                                        MERCADO_SOLIDARIO_URL."/frontend/assets/woocommerce-placeholder.png";
 
                 $stock[$sku] = [
                     'id' => $product->get_id(),
