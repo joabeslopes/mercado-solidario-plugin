@@ -3,6 +3,7 @@
 namespace Mercado_Solidario\Model;
 use WC_Product_Query;
 use WP_REST_Request;
+use WP_Error;
 
 // don't call the file directly
 defined( 'ABSPATH' ) || die;
@@ -76,7 +77,7 @@ class Checkout {
                     $quantity = $product->get_stock_quantity() - $cartProd['quantity'];
                     if ($quantity < 0) {
                         $status = 400;
-                        $messages[] = $product->get_name() . ' sem estoque';
+                        $messages[] = $product->get_name() . ' sem estoque suficiente';
                     };
 
                 } else {
@@ -84,12 +85,14 @@ class Checkout {
                     $messages[] = $cartProd['sku'] . ' não existe';
                 }
             }
-        }
+        };
 
-        return [ 
-            'status'  => $status,
-            'data' => $messages
-        ];
+        if ($status != 200) {
+            return new WP_Error(code: 'mercado_solidario_checkout_cart_error', data: $messages);
+        } else {
+            return true;
+        };
+
     }
 
 }

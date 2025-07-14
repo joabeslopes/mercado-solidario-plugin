@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import ProductList from './ProductList.vue';
-import { get, post } from '../myApiClient';
+import { get, post, response_error_string } from '../myApiClient';
 
 const emptyCart = {
   'productSku': {},
@@ -33,11 +33,20 @@ async function getStock(){
 
     const response = await get('/checkout/stock');
 
-    if (response != null){
-      stock.value = response;
-      sessionStorage.setItem('mercado-solidario-stock', JSON.stringify(response));
+    if (response.status == 200){
+      stock.value = response.data;
+      sessionStorage.setItem('mercado-solidario-stock', JSON.stringify(response.data));
     } else {
-      alert('Erro ao buscar produtos');
+      new Popup({
+          id: "erro-produtos",
+          title: "Erro",
+          content: "Não foi possível buscar os produtos",
+          showImmediately: true,
+          hideCallback: () => {
+              document.querySelectorAll(".erro-produtos").forEach(e => e.remove());
+          },
+          css: popupcss
+      });
     };
 
   };
@@ -183,7 +192,7 @@ async function sendCart(){
     new Popup({
         id: "erro-compra",
         title: "Erro",
-        content: "Compra não efetuada",
+        content: response_error_string(response),
         showImmediately: true,
         hideCallback: () => {
             document.querySelectorAll(".erro-compra").forEach(e => e.remove());
