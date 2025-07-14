@@ -22,11 +22,11 @@ class Families {
             ],
         ];
 
-        return $families;
+        return [ 'data' => $families ];
     }
 
-    public function get_families_permission(): bool {
-        return true;
+    public function families_permission(): bool {
+        return current_user_can( 'edit_pages' );
     }
 
 }

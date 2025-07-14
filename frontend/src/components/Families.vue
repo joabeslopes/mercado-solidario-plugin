@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import { get } from '../myApiClient';
+import showPopup from '../myPopup';
 
 const families = ref({});
 
@@ -14,11 +15,11 @@ async function getFamilies(){
   else {
     const response = await get('/families');
 
-    if (response != null){
-      families.value = response;
-      sessionStorage.setItem('mercado-solidario-families', JSON.stringify(response));
+    if (response.status == 200){
+      families.value = response.data;
+      sessionStorage.setItem('mercado-solidario-families', JSON.stringify(response.data));
     } else {
-      alert('Erro ao buscar famílias');
+      showPopup('Erro', 'Não foi possível buscar as famílias');
     };
 
   };

@@ -1,7 +1,8 @@
 <script setup>
 import { ref } from 'vue';
 import ProductList from './ProductList.vue';
-import { get, post, response_error_string } from '../myApiClient';
+import { get, post, myResponseErrorString } from '../myApiClient';
+import showPopup from '../myPopup';
 
 const emptyCart = {
   'productSku': {},
@@ -13,15 +14,6 @@ const searchSku = ref('');
 const stock = ref({});
 const cart = ref({});
 const lastSku = ref('');
-
-const popupcss = `
-        .popup-title {
-          font-size: 30px;
-        }
-        .popup-body p {
-          font-size: 20px;
-        }
-      `;
 
 async function getStock(){
 
@@ -37,16 +29,7 @@ async function getStock(){
       stock.value = response.data;
       sessionStorage.setItem('mercado-solidario-stock', JSON.stringify(response.data));
     } else {
-      new Popup({
-          id: "erro-produtos",
-          title: "Erro",
-          content: "Não foi possível buscar os produtos",
-          showImmediately: true,
-          hideCallback: () => {
-              document.querySelectorAll(".erro-produtos").forEach(e => e.remove());
-          },
-          css: popupcss
-      });
+      showPopup("Erro", "Não foi possível buscar os produtos");
     };
 
   };
@@ -174,31 +157,14 @@ async function sendCart(){
   const response = await post( '/checkout/cart', request );
 
   if (response.status == 200) {
-    new Popup({
-        id: "sucesso-compra",
-        title: "Sucesso",
-        content: "Compra efetuada",
-        showImmediately: true,
-        hideCallback: () => {
-            document.querySelectorAll(".sucesso-compra").forEach(e => e.remove());
-        },
-        css: popupcss
-    });
+
+    showPopup("Sucesso", "Compra efetuada");
 
     clearCart();
 
   } else {
 
-    new Popup({
-        id: "erro-compra",
-        title: "Erro",
-        content: response_error_string(response),
-        showImmediately: true,
-        hideCallback: () => {
-            document.querySelectorAll(".erro-compra").forEach(e => e.remove());
-        },
-        css: popupcss
-    });
+    showPopup("Erro", myResponseErrorString(response));
 
   };
 

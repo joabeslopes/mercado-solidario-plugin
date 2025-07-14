@@ -49,7 +49,7 @@ class Checkout {
             };
         };
 
-        return $stock;
+        return [ 'data' => $stock ];
 
     }
 
@@ -90,7 +90,7 @@ class Checkout {
         if ($status != 200) {
             return new WP_Error(code: 'mercado_solidario_checkout_cart_error', data: $messages);
         } else {
-            return true;
+            return [ 'data' => true ];
         };
 
     }

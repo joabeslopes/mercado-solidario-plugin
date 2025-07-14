@@ -26,7 +26,7 @@ class Families {
             [
             'methods' => 'GET',
             'callback' => [ $this->model, 'get_all_families' ],
-            'permission_callback' => [ $this->model, 'get_families_permission' ],
+            'permission_callback' => [ $this->model, 'families_permission' ],
             ]
         );
 

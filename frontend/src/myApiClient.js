@@ -1,18 +1,13 @@
 const apiNamespace = '/wp-json/mercado-solidario/v1';
 const nonce = mercadoSolidarioSettings.nonce;
 
-async function create_my_response(response) {
+async function createMyResponse(response) {
 
     let myResponse = {};
 
     try {
-        const responseJson = await response.json();
-        if (!response.ok) {
-            // em caso de erro a API Wordpress ja vai retornar as propriedades 'message' e 'data'
-            myResponse = responseJson;
-        } else {
-            myResponse.data = responseJson;
-        };
+        // sempre vai vir da API o atributo 'data'
+        myResponse = await response.json();
 
         myResponse.status = response.status;
 
@@ -24,7 +19,7 @@ async function create_my_response(response) {
     return myResponse;
 };
 
-export function response_error_string(myResponse) {
+export function myResponseErrorString(myResponse) {
 
     if( myResponse.message ){
       return myResponse.message;
@@ -48,7 +43,7 @@ export async function post(path, requestObj) {
         }
     );
 
-    const response = await create_my_response(apiResponse);
+    const response = await createMyResponse(apiResponse);
 
     return response;
 };
@@ -64,7 +59,7 @@ export async function get(path) {
         }
     );
 
-    const response = await create_my_response(apiResponse);
+    const response = await createMyResponse(apiResponse);
 
     return response;
 };
