@@ -1,6 +1,7 @@
 <?php
 
 namespace Mercado_Solidario\Model;
+use Mercado_Solidario\REST;
 
 // don't call the file directly
 defined( 'ABSPATH' ) || die;
@@ -21,8 +22,7 @@ class Families {
                 'balance' => 150
             ],
         ];
-
-        return [ 'data' => $families ];
+        return REST\success_response($families);
     }
 
     public function families_permission(): bool {

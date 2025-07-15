@@ -1,9 +1,9 @@
 <?php
 
 namespace Mercado_Solidario\Model;
+use Mercado_Solidario\REST;
 use WC_Product_Query;
 use WP_REST_Request;
-use WP_Error;
 
 // don't call the file directly
 defined( 'ABSPATH' ) || die;
@@ -49,8 +49,7 @@ class Checkout {
             };
         };
 
-        return [ 'data' => $stock ];
-
+        return REST\success_response($stock);
     }
 
     public function post_cart( WP_REST_Request $request ) {
@@ -88,11 +87,10 @@ class Checkout {
         };
 
         if ($status != 200) {
-            return new WP_Error(code: 'mercado_solidario_checkout_cart_error', data: $messages);
+            return REST\error_response('mercado_solidario_checkout_cart_error', $messages);
         } else {
-            return [ 'data' => true ];
+            return REST\success_response(true);
         };
-
     }
 
 }
