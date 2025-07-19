@@ -7,13 +7,13 @@ import showPopup from '../myPopup';
 const emptyCart = {
   'productSku': {},
   'skuList': [],
-  'total': 0
+  'total': 0,
+  'lastSku': ''
 };
 
 const searchSku = ref('');
 const stock = ref({});
 const cart = ref({});
-const lastSku = ref('');
 
 async function getStock(){
 
@@ -23,7 +23,7 @@ async function getStock(){
     stock.value = JSON.parse(savedStock);
   } else {
 
-    const response = await get('/checkout/stock');
+    const response = await get('/stock');
 
     if (response.status == 200){
       stock.value = response.data;
@@ -47,7 +47,6 @@ function clearCart(){
 
   cart.value = structuredClone(emptyCart);
   clearCartLocalStorage();
-  lastSku.value = '';
 
 };
 
@@ -88,10 +87,10 @@ function addProd(sku){
   cart.value.total += prodSearch.price;
 
   searchSku.value = '';
+
+  cart.value.lastSku = sku;
   
   saveCartLocalStorage();
-
-  lastSku.value = sku;
 
 };
 
@@ -154,7 +153,7 @@ async function sendCart(){
     'cart': userCart
   };
 
-  const response = await post( '/checkout/cart', request );
+  const response = await post( '/stock/cart', request );
 
   if (response.status == 200) {
 
@@ -184,7 +183,8 @@ getCart();
   <div class="stock">
     <div v-for="(prod, sku) in stock">
       <div :key="sku" class="prodImg" @click="addProd(sku)">
-        <img :src="prod.image" :class="{'selected': lastSku == sku}" width="100px" height="100px">
+        <img :src="prod.image" :class="{'selected': cart.lastSku == sku}" width="100px" height="100px">
+        <p>{{prod.name}}</p>
       </div>
     </div>
   </div>
@@ -197,7 +197,7 @@ getCart();
 
     <button @click="sendCart()">Finalizar</button>
 
-    <ProductList :cart="cart" @sub="subProduct" @del="deleteProd"/>
+    <ProductList :cart="cart" @add="addProd" @sub="subProduct" @del="deleteProd"/>
 
   </div>
 
@@ -227,7 +227,7 @@ getCart();
   display: flex;
   flex: 50%;
   flex-flow: row wrap;
-  gap: 5px;
+  gap: 10px;
   align-items: flex-start;
 }
 
@@ -260,5 +260,6 @@ input:focus{
 
 p {
   font-size: 15px;
+  color: white;
 }
 </style>

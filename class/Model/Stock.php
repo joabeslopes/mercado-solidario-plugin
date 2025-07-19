@@ -9,9 +9,9 @@ use WC_Order;
 // don't call the file directly
 defined( 'ABSPATH' ) || die;
 
-class Checkout {
+class Stock {
 
-    public function checkout_permission(): bool{
+    public function get_permission(): bool{
         return current_user_can( 'manage_woocommerce' );
     }
 
@@ -19,18 +19,15 @@ class Checkout {
 
         $args = [
             'limit' => -1,
-            'stock_status' => 'instock',
+            'type' => [ 'simple', 'variation' ]
         ];
 
-        // Perform Query
         $query = new WC_Product_Query($args);
 
-        // Collect Product Object
         $products = $query->get_products();
 
         $stock = [];
 
-        // Loop through products
         if (!empty( $products )) {
             foreach ($products as $product) {
 

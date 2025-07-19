@@ -18,7 +18,7 @@ class Router{
 
     public function __construct(){
 
-        new Checkout();
+        new Stock();
         new Families();
     }
 

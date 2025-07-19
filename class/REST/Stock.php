@@ -6,14 +6,14 @@ use Mercado_Solidario\Model;
 // don't call the file directly
 defined( 'ABSPATH' ) || die;
 
-class Checkout {
+class Stock {
 
-    public string $base_route = 'checkout';
-    public Model\Checkout $model;
+    public string $base_route = 'stock';
+    public Model\Stock $model;
 
     public function __construct(){
 
-        $this->model = new Model\Checkout();
+        $this->model = new Model\Stock();
 
         add_action( 'rest_api_init', [ $this, 'register_get_stock' ] );
         add_action( 'rest_api_init', [ $this, 'register_post_cart' ] );
@@ -24,11 +24,11 @@ class Checkout {
 
         register_rest_route( 
             MERCADO_SOLIDARIO_REST_NAMESPACE,
-            $this->base_route.'/stock', 
+            $this->base_route, 
             [
             'methods' => 'GET',
             'callback' => [ $this->model, 'get_stock' ],
-            'permission_callback' => [ $this->model, 'checkout_permission' ],
+            'permission_callback' => [ $this->model, 'get_permission' ],
             ]
         );
 
@@ -42,7 +42,7 @@ class Checkout {
             [
             'methods' => 'POST',
             'callback' => [ $this->model, 'post_cart' ],
-            'permission_callback' => [ $this->model, 'checkout_permission' ],
+            'permission_callback' => [ $this->model, 'get_permission' ],
             ]
         );
 

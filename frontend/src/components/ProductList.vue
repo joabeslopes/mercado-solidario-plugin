@@ -11,14 +11,19 @@ const props = defineProps({
     <table>
         <thead>
             <th class="produto">Produto</th>
-            <th class="quantidade">Qtd.</th>
             <th class="preco">Preço</th>
+            <th class="quantidade">Qtd.</th>
+            <th class="add"></th>
             <th class="sub"></th>
             <th class="del"></th>
         </thead>
         <tbody>
             <tr v-for="sku in cart.skuList">
-                <Product :key="sku" :product="cart.productSku[sku]" @sub="$emit('sub', sku)" @del="$emit('del', sku)" />
+                <Product :key="sku" 
+                        :product="cart.productSku[sku]" 
+                        @add="$emit('add', sku)" 
+                        @sub="$emit('sub', sku)" 
+                        @del="$emit('del', sku)" />
             </tr>
         </tbody>
     </table>
@@ -46,6 +51,10 @@ tr{
 
 .preco{
     width: 15%;
+}
+
+.add{
+    width: 10%;
 }
 
 .sub{

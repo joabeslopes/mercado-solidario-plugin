@@ -25,7 +25,7 @@ class Families {
         return REST\success_response($families);
     }
 
-    public function families_permission(): bool {
+    public function get_permission(): bool {
         return current_user_can( 'edit_pages' );
     }
 
