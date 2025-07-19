@@ -3,12 +3,12 @@ import { ref } from 'vue';
 import ProductList from './ProductList.vue';
 import { get, post, myResponseErrorString } from '../myApiClient';
 import showPopup from '../myPopup';
+import StockList from './StockList.vue';
 
 const emptyCart = {
   'productSku': {},
   'skuList': [],
   'total': 0,
-  'lastSku': ''
 };
 
 const searchSku = ref('');
@@ -87,8 +87,6 @@ function addProd(sku){
   cart.value.total += prodSearch.price;
 
   searchSku.value = '';
-
-  cart.value.lastSku = sku;
   
   saveCartLocalStorage();
 
@@ -180,14 +178,7 @@ getCart();
 
 <div class="page">
 
-  <div class="stock">
-    <div v-for="(prod, sku) in stock">
-      <div :key="sku" class="prodImg" @click="addProd(sku)">
-        <img :src="prod.image" :class="{'selected': cart.lastSku == sku}" width="100px" height="100px">
-        <p>{{prod.name}}</p>
-      </div>
-    </div>
-  </div>
+  <StockList :stock="stock" @add="addProd" />
 
   <div class="cart">
 
@@ -197,12 +188,11 @@ getCart();
 
     <button @click="sendCart()">Finalizar</button>
 
-    <ProductList :cart="cart" @add="addProd" @sub="subProduct" @del="deleteProd"/>
+    <ProductList :cart="cart" @add="addProd" @sub="subProduct" @del="deleteProd" />
 
   </div>
 
 </div>
-
 
 </template>
 
@@ -211,24 +201,6 @@ getCart();
 .page{
   display: flex;
   gap: 10%;
-}
-
-.prodImg:hover{
-  cursor: pointer;
-}
-
-.stock{
-  background-color: black;
-  border-radius: 12px;
-  box-sizing: border-box;
-  padding: 20px;
-  width: 50%;
-  height: 100%;
-  display: flex;
-  flex: 50%;
-  flex-flow: row wrap;
-  gap: 10px;
-  align-items: flex-start;
 }
 
 .cart{
@@ -254,12 +226,4 @@ input:focus{
   outline: 5px solid greenyellow;
 }
 
-.selected{
-  outline: 5px solid greenyellow;
-}
-
-p {
-  font-size: 15px;
-  color: white;
-}
 </style>
