@@ -18,12 +18,14 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 // don't call the file directly
 defined( 'ABSPATH' ) || die;
 
+require_once('vendor/autoload.php' );
+
 define('MERCADO_SOLIDARIO_URL', plugins_url( '/mercado-solidario'));
 define('MERCADO_SOLIDARIO_DIR', plugin_dir_path( __FILE__));
 define('MERCADO_SOLIDARIO_VERSION', '1.0');
 define( 'MERCADO_SOLIDARIO_REST_NAMESPACE', 'mercado-solidario/v1' );
+define('MERCADO_SOLIDARIO_FAMILY_POST', 'ms_family');
 
-require_once('vendor/autoload.php' );
 
 new Mercado_Solidario\Pages\Main_Page();
 

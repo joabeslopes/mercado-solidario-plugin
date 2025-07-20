@@ -14,7 +14,7 @@ const emptyFamily = {
   'notes': ''
 };
 
-const newFamily = ref(structuredClone(emptyFamily));
+const newFamily = ref({...emptyFamily});
 
 async function getFamilies(){
 
@@ -22,7 +22,7 @@ async function getFamilies(){
 
   if (savedFamilies != null) {
     families.value = JSON.parse(savedFamilies);
-  } 
+  }
   else {
     const response = await get('/families');
 
@@ -30,7 +30,7 @@ async function getFamilies(){
       families.value = response.data;
       sessionStorage.setItem('mercado-solidario-families', JSON.stringify(response.data));
     } else {
-      showPopup('Erro', 'Não foi possível buscar as famílias');
+      showPopup('Erro', 'Não foi possível encontrar as famílias');
     };
 
   };
@@ -45,7 +45,17 @@ async function sendFamily(){
   const response = await post('/families', request);
 
   if (response.status == 200){
-    newFamily.value = structuredClone(emptyFamily);
+
+    if (Array.isArray(families.value)){
+      families.value.push({...newFamily.value});
+    } else {
+      families.value = [{...newFamily.value}];
+    };
+
+    newFamily.value = {...emptyFamily};
+    sessionStorage.setItem('mercado-solidario-families', JSON.stringify(families.value));
+
+    showPopup('Sucesso', 'Enviou nova família');
   } else {
     showPopup('Erro', 'Não foi possível criar a nova família');
   };
@@ -104,7 +114,7 @@ getFamilies();
         <p>Telefone</p>
         <input v-model="newFamily.phone" name="phone" @input="numericInput" />
         <p>Saldo</p>
-        <input v-model="newFamily.balance" />
+        <input v-model="newFamily.balance" name="balance" @input="numericInput" />
         <p>Válida até</p>
         <input v-model="newFamily.valid_until" type="date" />
         <p>Observações</p>

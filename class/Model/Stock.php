@@ -1,7 +1,7 @@
 <?php
 
 namespace Mercado_Solidario\Model;
-use Mercado_Solidario\REST;
+use Mercado_Solidario\REST\Router;
 use WC_Product_Query;
 use WP_REST_Request;
 use WC_Order;
@@ -47,7 +47,7 @@ class Stock {
             };
         };
 
-        return REST\success_response($stock);
+        return Router::success_response($stock);
     }
 
     public function post_cart( WP_REST_Request $request ) {
@@ -100,9 +100,9 @@ class Stock {
 
             $order_id = $order->save();
 
-            return REST\success_response( [ 'order' => $order_id ] );
+            return Router::success_response( [ 'order' => $order_id ] );
         } else {
-            return REST\error_response('mercado_solidario_checkout_cart_error', $messages);
+            return Router::error_response('mercado_solidario_checkout_cart_error', $messages);
         };
     }
 

@@ -1,33 +1,60 @@
 <?php
 
 namespace Mercado_Solidario\Model;
-use Mercado_Solidario\REST;
+use Mercado_Solidario\REST\Router;
+use WP_REST_Request;
 
 // don't call the file directly
 defined( 'ABSPATH' ) || die;
 
 class Families {
 
-    public function get_all_families(): array {
+    public Family $family;
 
-        $test1 = new Family();
-        $test1->id = 1;
-        $test1->name = 'Joabe';
-        $test1->balance = 100;
-        $test1->valid_until = date('Y-m-d');
+    public function __construct(){
+        add_action('init', [$this, 'register_family_post_type']);
+    }
 
-        $test2 = new Family();
-        $test2->id = 2;
-        $test2->name = 'Fulano';
-        $test2->balance = 200;
-        $test2->valid_until = date('Y-m-d');
+    public function register_family_post_type(){
+        register_post_type(MERCADO_SOLIDARIO_FAMILY_POST, [
+            'public' => false
+        ]);
+    }
 
-        $families = [
-            (array)$test1,
-            (array)$test2
-        ];
+    public function get_all_families() {
 
-        return REST\success_response($families);
+        $families = Family::search_all_valid_families();
+
+        if ($families){
+            return Router::success_response($families);
+        } else {
+            return Router::error_response('error', 'Nenhuma familia encontrada');
+        };
+
+    }
+
+    public function post_family( WP_REST_Request $request ){
+        $new_family = $request['newFamily'];
+
+        if(!$new_family){
+            return Router::error_response('erro', 'Faltou enviar a nova familia');
+        };
+
+        $family = new Family(
+            name: $new_family['name'],
+            cpf: $new_family['cpf'],
+            phone: $new_family['phone'],
+            balance: $new_family['balance'],
+            valid_until: $new_family['valid_until'],
+            notes: $new_family['notes']
+        );
+
+        if ( $family->save() ){
+            return Router::success_response();
+        } else {
+            return Router::error_response('erro', 'erro na hora de salvar');
+        };
+
     }
 
     public function get_permission(): bool {
