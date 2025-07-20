@@ -176,11 +176,11 @@ getCart();
 
 <template>
 
-<div class="page">
+<div class="divPage">
 
   <StockList :stock="stock" @add="addProd" />
 
-  <div class="cart">
+  <div class="divSubpage cart">
 
     <input v-model="searchSku" @keyup.enter="addProd(searchSku)" />
 
@@ -197,24 +197,12 @@ getCart();
 </template>
 
 <style scoped>
-
-.page{
-  display: flex;
-  gap: 10%;
-}
-
 .cart{
   background-color: black;
   color: white;
   box-sizing: border-box;
   border-radius: 12px;
   padding: 20px;
-  width: 50%;
-  display: flex;
-  flex: 50%;
-  flex-flow: column;
-  height: auto;
-  align-items: center;
 }
 
 input {

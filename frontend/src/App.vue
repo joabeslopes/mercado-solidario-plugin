@@ -40,3 +40,18 @@ a:focus{
   box-shadow: none;
 }
 </style>
+
+<style>
+.divPage{
+  display: flex;
+  gap: 10%;
+}
+
+.divSubpage{
+  display: flex;
+  flex: 50%;
+  flex-flow: column;
+  align-items: center;
+  width: 50%;
+}
+</style>

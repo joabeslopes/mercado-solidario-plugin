@@ -10,18 +10,23 @@ class Families {
 
     public function get_all_families(): array {
 
+        $test1 = new Family();
+        $test1->id = 1;
+        $test1->name = 'Joabe';
+        $test1->balance = 100;
+        $test1->valid_until = date('Y-m-d');
+
+        $test2 = new Family();
+        $test2->id = 2;
+        $test2->name = 'Fulano';
+        $test2->balance = 200;
+        $test2->valid_until = date('Y-m-d');
+
         $families = [
-            [ 
-                'id' => 1,
-                'main_person' => 'Joabe',
-                'balance' => 200
-            ],
-            [ 
-                'id' => 2,
-                'main_person' => 'Luiz',
-                'balance' => 150
-            ],
+            (array)$test1,
+            (array)$test2
         ];
+
         return REST\success_response($families);
     }
 

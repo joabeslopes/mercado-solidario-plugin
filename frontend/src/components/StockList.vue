@@ -17,7 +17,7 @@ function added(sku){
 </script>
 
 <template>
-  <div class="stock">
+  <div class="divSubpage stock">
     <div v-for="(prod, sku) in stock">
       <div :key="sku" class="prodImg" @click="added(sku)">
         <img :src="prod.image" :class="{'selected': lastSku == sku}" width="100px" height="100px">
@@ -34,10 +34,7 @@ function added(sku){
   border-radius: 12px;
   box-sizing: border-box;
   padding: 20px;
-  width: 50%;
   height: 100%;
-  display: flex;
-  flex: 50%;
   flex-flow: row wrap;
   gap: 10px;
   align-items: flex-start;

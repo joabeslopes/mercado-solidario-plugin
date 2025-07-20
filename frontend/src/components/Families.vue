@@ -1,9 +1,20 @@
 <script setup>
 import { ref } from 'vue';
-import { get } from '../myApiClient';
+import { get, post } from '../myApiClient';
 import showPopup from '../myPopup';
 
 const families = ref({});
+
+const emptyFamily = {
+  'name': '',
+  'cpf': '',
+  'phone': '',
+  'balance': '',
+  'valid_until': '',
+  'notes': ''
+};
+
+const newFamily = ref(structuredClone(emptyFamily));
 
 async function getFamilies(){
 
@@ -26,27 +37,83 @@ async function getFamilies(){
 
 };
 
-getFamilies();
+async function sendFamily(){
+  const request = {
+    'newFamily': newFamily.value
+  };
 
+  const response = await post('/families', request);
+
+  if (response.status == 200){
+    newFamily.value = structuredClone(emptyFamily);
+  } else {
+    showPopup('Erro', 'Não foi possível criar a nova família');
+  };
+
+};
+
+
+function numericInput(evt){
+  const property = evt.target.name;
+  newFamily.value[property] = newFamily.value[property].replace(/\D/g,'');
+};
+
+function alphaNumericInput(evt){
+  const property = evt.target.name;
+  newFamily.value[property] = newFamily.value[property].replace(/[^a-z0-9]/gi,'').toUpperCase();
+};
+
+
+getFamilies();
 </script>
 
 <template>
-  <h1>Famílias</h1>
+  <div class="divPage">
 
-  <div>
-    <div v-for="family in families">
+    <div class="divSubpage">
 
-      <p>
-        Id: {{ family.id }}
-      </p>
-      <p>
-        Responsável: {{ family.main_person }}
-      </p>
-      <p>
-        Saldo: {{ family.balance }}
-      </p>
+      <h1>Famílias atuais</h1>
+      <div v-for="family in families">
+        <p>
+          Responsável: {{ family.name }}
+        </p>
+        <p>
+          Saldo: {{ family.balance }}
+        </p>
+        <p>
+          Válida até: <input type="date"
+                        :value="family.valid_until"
+                        :min="family.valid_until" 
+                        :max="family.valid_until" />
+        </p>
+        <p>
+          Observações: {{ family.notes }}
+        </p>
+      </div>
 
     </div>
-  </div>
 
+    <div class="divSubpage">
+
+      <h1>Nova família</h1>
+      <div>
+        <p>Nome</p>
+        <input v-model="newFamily.name" />
+        <p>CPF</p>
+        <input v-model="newFamily.cpf" name="cpf" @input="alphaNumericInput" />
+        <p>Telefone</p>
+        <input v-model="newFamily.phone" name="phone" @input="numericInput" />
+        <p>Saldo</p>
+        <input v-model="newFamily.balance" />
+        <p>Válida até</p>
+        <input v-model="newFamily.valid_until" type="date" />
+        <p>Observações</p>
+        <textarea v-model="newFamily.notes" />
+        <p></p>
+        <button @click="sendFamily()">Criar</button>
+      </div>
+
+    </div>
+
+  </div>
 </template>
