@@ -5,7 +5,7 @@ import stockManager from '../js/stockManager';
 import CartList from './CartList.vue';
 import StockList from './StockList.vue';
 
-const stockObj = new stockManager('checkout');
+const stockObj = new stockManager('checkin');
 
 async function sendCart(){
 
@@ -27,11 +27,11 @@ async function sendCart(){
     'cart': userCart
   };
 
-  const response = await post( '/stock/checkout', request );
+  const response = await post( '/stock/checkin', request );
 
   if (response.status == 200) {
 
-    showPopup("Sucesso", "Compra efetuada");
+    showPopup("Sucesso", "Estoque abastecido");
 
     stockObj.clearCart();
 

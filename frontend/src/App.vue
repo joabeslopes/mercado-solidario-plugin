@@ -7,6 +7,9 @@
       <RouterLink to="/families">
         <a> Famílias </a>
       </RouterLink>
+      <RouterLink to="/checkin">
+        <a> Entrada estoque </a>
+      </RouterLink>
     </nav>
 
     <RouterView />

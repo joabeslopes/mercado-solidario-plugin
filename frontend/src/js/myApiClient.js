@@ -3,36 +3,48 @@ const nonce = mercadoSolidarioSettings.nonce;
 
 async function createMyResponse(response) {
 
-    let myResponse = {};
+    const myResponse = {
+        ok: response.ok,
+        status: response.status,
+        message: '',
+        data: []
+    };
 
     try {
-        // sempre vai vir da API o atributo 'data'
-        myResponse = await response.json();
+        const responseJson = await response.json();
 
-        myResponse.status = response.status;
-        myResponse.ok = response.ok;
+        myResponse.data = responseJson.data;
 
-        if (!response.ok){
-            myResponse.message = myResponseErrorString(myResponse);
+        if (!myResponse.ok){
+            myResponse.message = myResponseErrorString(responseJson);
         };
 
     } catch (error) {
-        myResponse.message = await error.text();
-        myResponse.status = 0;
+        console.error(error);
     };
 
     return myResponse;
 };
 
-export function myResponseErrorString(myResponse) {
+export function myResponseErrorString(response) {
 
-    if( myResponse.message ){
-      return myResponse.message;
+    let messageString = '';
+
+    if ( response.message && response.message != '' ){
+        messageString = response.message;
     } else {
-      let messageString = '';
-      myResponse.data.forEach( msg => messageString += msg + '\n' );
-      return messageString;
+        if (response.data){
+            if ( Array.isArray(response.data) ){
+                response.data.forEach( msg => messageString += String(msg) + '\n' );
+            } else {
+                if ( typeof response.data === "string" ){
+                    messageString = response.data;
+                };
+            };
+        };
     };
+
+    return messageString;
 };
 
 export async function post(path, requestObj) {

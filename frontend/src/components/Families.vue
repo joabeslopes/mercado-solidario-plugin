@@ -30,7 +30,7 @@ async function getFamilies(){
       families.value = response.data;
       sessionStorage.setItem('mercado-solidario-families', JSON.stringify(response.data));
     } else {
-      showPopup('Erro', 'Não foi possível encontrar as famílias');
+      showPopup('Erro', response.message);
     };
 
   };

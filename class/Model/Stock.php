@@ -50,7 +50,7 @@ class Stock {
         return Router::success_response($stock);
     }
 
-    public function post_cart( WP_REST_Request $request ) {
+    public function post_checkout( WP_REST_Request $request ) {
 
         $status = 200;
         $messages = [];
@@ -102,8 +102,14 @@ class Stock {
 
             return Router::success_response( [ 'order' => $order_id ] );
         } else {
-            return Router::error_response('mercado_solidario_checkout_cart_error', $messages);
+            return Router::error_response('mercado_solidario_error_checkout', $messages);
         };
+    }
+
+    public function post_checkin( WP_REST_Request $request ) {
+        $cart = $request['cart'];
+
+        return Router::error_response('mercado_solidario_error_checkin', 'Não disponível no momento');
     }
 
 }

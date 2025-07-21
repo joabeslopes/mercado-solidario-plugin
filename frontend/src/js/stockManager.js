@@ -17,30 +17,30 @@ export default class stockManager {
 
     constructor(page){
         this.cartSessionStorage = 'mercado-solidario-cart-'+page;
-        this.stockSessionStorage = 'mercado-solidario-stock-'+page;
+        this.stockSessionStorage = 'mercado-solidario-stock';
         this.getStockRef();
         this.getCartRef();
     };
 
     async getStockRef(){
 
-        const savedStock = sessionStorage.getItem(this.stockSessionStorage);
-      
-        if (savedStock != null) {
-          this.stock.value = JSON.parse(savedStock);
-        } else {
-      
-          const response = await get('/stock');
-      
-          if (response.status == 200){
-            this.stock.value = response.data;
-            sessionStorage.setItem(this.stockSessionStorage, JSON.stringify(response.data));
-          } else {
-            showPopup("Erro", "Não foi possível buscar os produtos");
-          };
+      const savedStock = sessionStorage.getItem(this.stockSessionStorage);
 
+      if (savedStock != null) {
+        this.stock.value = JSON.parse(savedStock);
+      } else {
+
+        const response = await get('/stock');
+
+        if (response.status == 200){
+          this.stock.value = response.data;
+          sessionStorage.setItem(this.stockSessionStorage, JSON.stringify(response.data));
+        } else {
+          showPopup("Erro", "Não foi possível buscar os produtos");
         };
-      
+
+      };
+
     };
 
     getCartRef(){
