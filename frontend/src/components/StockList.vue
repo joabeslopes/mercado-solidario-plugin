@@ -1,26 +1,17 @@
 <script setup>
-import { ref } from 'vue';
-
-const emit = defineEmits(['add']);
-
-const lastSku = ref('');
+import stockManager from '../js/stockManager';
 
 const props = defineProps({
-    stock: Object
+    stockObj: Object,
 });
-
-function added(sku){
-    lastSku.value = sku;
-    emit('add', sku);
-};
 
 </script>
 
 <template>
   <div class="divSubpage stock">
-    <div v-for="(prod, sku) in stock">
-      <div :key="sku" class="prodImg" @click="added(sku)">
-        <img :src="prod.image" :class="{'selected': lastSku == sku}" width="100px" height="100px">
+    <div v-for="(prod, sku) in stockObj.stock.value">
+      <div :key="sku" class="prodImg" @click="stockObj.addProd(sku)">
+        <img :src="prod.image" :class="{'selected': stockObj.lastSku.value == sku}" width="100px" height="100px">
         <p>{{prod.name}}</p>
       </div>
     </div>

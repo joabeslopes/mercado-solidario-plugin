@@ -1,5 +1,4 @@
 <script setup>
-
 const props = defineProps({
     product: Object
 });
@@ -17,7 +16,7 @@ const props = defineProps({
     <td>
         <button @click="$emit('sub')">-</button>
     </td>
-    <td class="del">
+    <td>
         <button @click="$emit('del')">Delete</button>  
     </td>
 

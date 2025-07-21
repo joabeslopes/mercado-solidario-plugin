@@ -10,6 +10,11 @@ async function createMyResponse(response) {
         myResponse = await response.json();
 
         myResponse.status = response.status;
+        myResponse.ok = response.ok;
+
+        if (!response.ok){
+            myResponse.message = myResponseErrorString(myResponse);
+        };
 
     } catch (error) {
         myResponse.message = await error.text();
