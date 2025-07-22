@@ -3,7 +3,7 @@ import Product from './Product.vue';
 import stockManager from '../js/stockManager';
 
 const props = defineProps({
-    stockObj: Object,
+    stockObj: stockManager,
 });
 
 </script>

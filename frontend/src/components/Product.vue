@@ -1,8 +1,10 @@
 <script setup>
+import stockManager from '../js/stockManager';
+
 const props = defineProps({
     sku: String,
     product: Object,
-    stockObj: Object
+    stockObj: stockManager
 });
 
 function quantityInput(evt){
@@ -38,6 +40,6 @@ function quantityInput(evt){
 
 <style scoped>
 input{
-    width: 50%;
+    width: 60%;
 }
 </style>
