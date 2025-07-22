@@ -47,7 +47,7 @@ a:focus{
 <style>
 .divPage{
   display: flex;
-  gap: 10%;
+  gap: 5%;
 }
 
 .divSubpage{
