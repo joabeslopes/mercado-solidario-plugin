@@ -65,7 +65,7 @@ async function sendFamily(){
 
 function numericInput(evt){
   const property = evt.target.name;
-  newFamily.value[property] = newFamily.value[property].replace(/\D/g,'');
+  newFamily.value[property] = newFamily.value[property].replace(/[^0-9]/g,'');
 };
 
 function alphaNumericInput(evt){

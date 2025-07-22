@@ -29,11 +29,10 @@ const props = defineProps({
         </thead>
         <tbody>
             <tr v-for="sku in stockObj.cart.value.skuList">
-                <Product :key="sku" 
+                <Product :key="sku"
+                        :sku="sku"
                         :product="stockObj.cart.value.productSku[sku]" 
-                        @add="stockObj.addProd(sku)" 
-                        @sub="stockObj.subProd(sku)" 
-                        @del="stockObj.delProd(sku)" />
+                        :stockObj="stockObj"  />
             </tr>
         </tbody>
     </table>

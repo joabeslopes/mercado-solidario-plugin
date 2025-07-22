@@ -1,7 +1,21 @@
 <script setup>
 const props = defineProps({
-    product: Object
+    sku: String,
+    product: Object,
+    stockObj: Object
 });
+
+function quantityInput(evt){
+    const newQuantity = Number( evt.target.value.replace(/[^0-9]/g,'') );
+
+    if (newQuantity > 0){
+        props.product.quantity = newQuantity;
+    } else {
+        props.product.quantity = 1;
+    };
+
+    props.stockObj.updateCartTotal();
+};
 
 </script>
 
@@ -9,15 +23,21 @@ const props = defineProps({
 
     <td>{{ product.name }}</td>
     <td>R$ {{ product.price }}</td>
-    <td>{{ product.quantity }}</td>
+    <td><input v-model="product.quantity" @input="quantityInput" /> </td>
     <td>
-        <button @click="$emit('add')">+</button>
+        <button @click="stockObj.addProd(sku)">+</button>
     </td>
     <td>
-        <button @click="$emit('sub')">-</button>
+        <button @click="stockObj.subProd(sku)">-</button>
     </td>
     <td>
-        <button @click="$emit('del')">Delete</button>  
+        <button @click="stockObj.delProd(sku)">Delete</button>  
     </td>
 
 </template>
+
+<style scoped>
+input{
+    width: 50%;
+}
+</style>
