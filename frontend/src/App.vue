@@ -62,9 +62,5 @@ a:focus{
   .divPage{
     flex-direction: column;
   }
-
-  .divSubpage{
-    width: 100%
-  }
 }
 </style>
