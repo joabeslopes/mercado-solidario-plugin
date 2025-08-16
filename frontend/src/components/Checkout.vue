@@ -9,19 +9,11 @@ const stockObj = new stockManager('checkout');
 
 async function sendCart(){
 
-  if (stockObj.cart.value.total == 0){
+  const userCart = stockObj.getCart();
+
+  if (userCart == null){
     return null;
   };
-
-  const userCart = stockObj.cart.value.skuList.map(
-    (sku) => {
-      const prod = stockObj.cart.value.productSku[sku];
-      return {
-        'sku': sku, 
-        'quantity': prod.quantity
-      };
-    }
-  );
 
   const request = {
     'cart': userCart

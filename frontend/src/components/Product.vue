@@ -8,15 +8,7 @@ const props = defineProps({
 });
 
 function quantityInput(evt){
-    const newQuantity = Number( evt.target.value.replace(/[^0-9]/g,'') );
-
-    if (newQuantity > 0){
-        props.product.quantity = newQuantity;
-    } else {
-        props.product.quantity = 1;
-    };
-
-    props.stockObj.updateCartTotal();
+    props.stockObj.setQuantity(props.sku, evt.target.value);
 };
 
 </script>

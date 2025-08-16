@@ -18,11 +18,11 @@ export default class stockManager {
   constructor(page){
     this.cartSessionStorage = 'mercado-solidario-cart-'+page;
     this.stockSessionStorage = 'mercado-solidario-stock';
-    this.getStockRef();
-    this.getCartRef();
+    this.loadStockRef();
+    this.loadCartRef();
   };
 
-  async getStockRef(){
+  async loadStockRef(){
 
     const savedStock = sessionStorage.getItem(this.stockSessionStorage);
 
@@ -40,33 +40,28 @@ export default class stockManager {
       };
 
     };
-
   };
 
-  getCartRef(){
+  loadCartRef(){
 
     const savedCart = localStorage.getItem(this.cartSessionStorage);
     this.cart.value = savedCart == null ? structuredClone(this.emptyCart) : JSON.parse(savedCart);
-
   };
 
   clearCart(){
 
     this.cart.value = structuredClone(this.emptyCart);
     localStorage.removeItem(this.cartSessionStorage);
-
   };
 
   saveCartLocalStorage(){
 
     localStorage.setItem(this.cartSessionStorage, JSON.stringify(this.cart.value));
-
   };
 
   addProd(sku){
 
     const prodSearch = this.stock.value[sku];
-
     if (!prodSearch){
       return null;
     };
@@ -78,50 +73,44 @@ export default class stockManager {
       'quantity': 1
     };
 
-    if (this.cart.value.productSku[sku]) { 
-      this.cart.value.productSku[sku].quantity += 1;
-    } else {
+    const prod = this.cart.value.productSku[sku];
+
+    if (!prod) {
       this.cart.value.productSku[sku] = newProduct;
       this.cart.value.skuList.unshift(sku);
+    } else {
+      prod.quantity = this.getQuantity(sku) + 1;
     };
-
-    this.cart.value.total += prodSearch.price;
 
     this.searchSku.value = '';
     this.lastSku.value = sku;
 
-    this.saveCartLocalStorage();
-
+    this.updateCartTotal();
   };
 
   subProd(sku){
 
-    const prodSearch = this.cart.value.productSku[sku];
-
-    if (!prodSearch){
+    const prod = this.cart.value.productSku[sku];
+    if (!prod){
       return null;
     };
 
-    if (prodSearch.quantity > 1){
-      this.cart.value.productSku[sku].quantity -= 1;
-      this.cart.value.total -= prodSearch.price;
+    if (this.getQuantity(sku) > 1){
+      prod.quantity = this.getQuantity(sku) - 1;
     } else {
       this.delProd(sku);
+      return null;
     };
 
-    this.saveCartLocalStorage();
-
+    this.updateCartTotal();
   };
 
   delProd(sku){
 
-    const prodSearch = this.cart.value.productSku[sku];
-
-    if (!prodSearch){
+    const prod = this.cart.value.productSku[sku];
+    if (!prod){
       return null;
     };
-
-    this.cart.value.total -= prodSearch.quantity * prodSearch.price;
 
     delete this.cart.value.productSku[sku];
 
@@ -129,23 +118,68 @@ export default class stockManager {
 
     this.cart.value.skuList.splice(prodIndex, 1);
 
-    this.saveCartLocalStorage();
+    this.updateCartTotal();
+  };
 
+  getQuantity(sku){
+
+    const prod = this.cart.value.productSku[sku];
+    if (!prod){
+      return null;
+    };
+
+    return Number(prod.quantity);
+  };
+
+  setQuantity(sku, value){
+
+    const prod = this.cart.value.productSku[sku];
+    if (!prod){
+      return null;
+    };
+
+    const newQuantity = value.replace(/[^0-9]/g,'');
+
+    prod.quantity = newQuantity == '' ? '' : Number(newQuantity);
+
+    this.updateCartTotal();
   };
 
   updateCartTotal(){
     let soma = 0;
 
-    Object.keys(this.cart.value.productSku).forEach(
-      sku => {
-        const prod = this.cart.value.productSku[sku];
-        soma += prod.quantity * prod.price;
-      }
-    );
+    for (let sku in this.cart.value.productSku){
+      const prod = this.cart.value.productSku[sku];
+
+      soma += this.getQuantity(sku) * prod.price;
+    };
 
     this.cart.value.total = soma;
     this.saveCartLocalStorage();
+  };
 
-  }
+  getCart(){
 
-}
+    if (this.cart.value.total == 0){
+      return null;
+    };
+
+    const userCart = [];
+
+    for (let sku in this.cart.value.productSku){
+      const prod = this.cart.value.productSku[sku];
+
+      if (this.getQuantity(sku) > 0){
+        userCart.push(
+          {
+            'sku': sku, 
+            ...prod
+          }
+        );
+      };
+    };
+
+    return userCart;
+  };
+
+};
