@@ -1,4 +1,4 @@
-const apiNamespace = '/wp-json/mercado-solidario/v1';
+const apiNamespace = mercadoSolidarioSettings.namespace;
 const nonce = mercadoSolidarioSettings.nonce;
 
 async function createMyResponse(response) {
