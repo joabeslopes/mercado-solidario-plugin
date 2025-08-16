@@ -1,6 +1,6 @@
 <?php
 
-namespace Mercado_Solidario\REST;
+namespace Mercado_Solidario\Controller;
 use Mercado_Solidario\Model;
 
 // don't call the file directly

@@ -1,6 +1,7 @@
 <?php
 
 namespace Mercado_Solidario\REST;
+use Mercado_Solidario\Controller;
 use WP_Error;
 
 // don't call the file directly
@@ -17,9 +18,8 @@ class Router{
     }
 
     public function __construct(){
-
-        new Stock();
-        new Families();
+        new Controller\Stock();
+        new Controller\Families();
     }
 
 };
