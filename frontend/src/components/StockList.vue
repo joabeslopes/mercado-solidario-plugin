@@ -31,6 +31,12 @@ const props = defineProps({
   align-items: flex-start;
 }
 
+@media (max-width: 768px) {
+  .divSubpage {
+    order: 2;
+  }
+}
+
 .prodImg:hover{
   cursor: pointer;
 }

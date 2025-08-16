@@ -47,14 +47,24 @@ a:focus{
 <style>
 .divPage{
   display: flex;
+  justify-content: space-between;
   gap: 5%;
 }
 
 .divSubpage{
   display: flex;
-  flex: 50%;
+  flex: 1;
   flex-flow: column;
   align-items: center;
-  width: 50%;
+}
+
+@media (max-width: 768px) {
+  .divPage{
+    flex-direction: column;
+  }
+
+  .divSubpage{
+    width: 100%
+  }
 }
 </style>

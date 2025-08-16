@@ -51,6 +51,12 @@ const props = defineProps({
   padding: 20px;
 }
 
+@media (max-width: 768px) {
+  .divSubpage {
+    order: 1;
+  }
+}
+
 input {
   width: 50%;
   height: 30px;
