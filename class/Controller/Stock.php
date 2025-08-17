@@ -20,6 +20,10 @@ class Stock {
         add_action( 'rest_api_init', [ $this, 'register_post_checkin' ] );
     }
 
+    public function get_permission(){
+        return current_user_can( MERCADO_SOLIDARIO_CAPABILITY );
+    }
+
     public function register_get_stock() {
 
         register_rest_route( 
@@ -28,10 +32,9 @@ class Stock {
             [
             'methods' => 'GET',
             'callback' => [ $this->model, 'get_stock' ],
-            'permission_callback' => [ $this->model, 'get_permission' ],
+            'permission_callback' => [ $this, 'get_permission' ],
             ]
         );
-
     }
 
     public function register_post_checkout() {
@@ -42,10 +45,9 @@ class Stock {
             [
             'methods' => 'POST',
             'callback' => [ $this->model, 'post_checkout' ],
-            'permission_callback' => [ $this->model, 'get_permission' ],
+            'permission_callback' => [ $this, 'get_permission' ],
             ]
         );
-
     }
 
     public function register_post_checkin() {
@@ -56,10 +58,9 @@ class Stock {
             [
             'methods' => 'POST',
             'callback' => [ $this->model, 'post_checkin' ],
-            'permission_callback' => [ $this->model, 'get_permission' ],
+            'permission_callback' => [ $this, 'get_permission' ],
             ]
         );
-
     }
 
 }

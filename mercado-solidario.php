@@ -25,7 +25,7 @@ define('MERCADO_SOLIDARIO_DIR', plugin_dir_path( __FILE__));
 define('MERCADO_SOLIDARIO_VERSION', '1.0');
 define( 'MERCADO_SOLIDARIO_REST_NAMESPACE', 'mercado-solidario/v1' );
 define('MERCADO_SOLIDARIO_FAMILY_POST', 'ms_family');
-
+define('MERCADO_SOLIDARIO_CAPABILITY', 'manage_woocommerce');
 
 new Mercado_Solidario\Pages\Main_Page();
 

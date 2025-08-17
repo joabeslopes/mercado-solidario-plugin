@@ -19,6 +19,10 @@ class Families {
         add_action( 'rest_api_init', [ $this, 'register_delete' ] );
     }
 
+    public function get_permission(){
+        return current_user_can( MERCADO_SOLIDARIO_CAPABILITY );
+    }
+
     public function register_get() {
 
         register_rest_route(
@@ -27,10 +31,9 @@ class Families {
             [
             'methods' => 'GET',
             'callback' => [ $this->model, 'get_all_families' ],
-            'permission_callback' => [ $this->model, 'get_permission' ],
+            'permission_callback' => [ $this, 'get_permission' ],
             ]
         );
-
     }
 
     public function register_post() {
@@ -41,10 +44,9 @@ class Families {
             [
             'methods' => 'POST',
             'callback' => [ $this->model, 'post_family' ],
-            'permission_callback' => [ $this->model, 'get_permission' ],
+            'permission_callback' => [ $this, 'get_permission' ],
             ]
         );
-
     }
 
     public function register_delete() {
@@ -55,10 +57,9 @@ class Families {
             [
             'methods' => 'DELETE',
             'callback' => [ $this->model, 'delete_family' ],
-            'permission_callback' => [ $this->model, 'get_permission' ],
+            'permission_callback' => [ $this, 'get_permission' ],
             ]
         );
-
     }
 
 }

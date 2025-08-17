@@ -11,10 +11,6 @@ defined( 'ABSPATH' ) || die;
 
 class Stock {
 
-    public function get_permission(): bool{
-        return current_user_can( 'manage_woocommerce' );
-    }
-
     public function get_stock(): array {
 
         $args = [

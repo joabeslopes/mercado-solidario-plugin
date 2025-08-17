@@ -179,8 +179,4 @@ class Families {
 
     }
 
-    public function get_permission(): bool {
-        return current_user_can( 'edit_pages' );
-    }
-
 }
