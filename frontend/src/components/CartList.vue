@@ -10,7 +10,7 @@ const props = defineProps({
 
 <template>
 
-  <div class="divSubpage cart">
+  <div class="divSubpage box">
 
     <input v-model="stockObj.searchSku.value" @keyup.enter="stockObj.addProd(stockObj.searchSku.value)"  />
 
@@ -42,14 +42,6 @@ const props = defineProps({
 </template>
 
 <style scoped>
-
-.cart{
-  background-color: black;
-  color: white;
-  box-sizing: border-box;
-  border-radius: 12px;
-  padding: 20px;
-}
 
 @media (max-width: 768px) {
   .divSubpage {

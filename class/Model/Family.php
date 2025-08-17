@@ -1,7 +1,6 @@
 <?php
 
 namespace Mercado_Solidario\Model;
-use WP_Query;
 use WP_Post;
 
 // don't call the file directly
@@ -13,41 +12,34 @@ class Family {
     public string $name;
     public string $cpf;
     public string $phone;
-    public int $balance;
+    public float $balance;
     public string $valid_until;
     public string $notes;
 
-    // ID
     public function set_id($id): void {
         $this->id = (int) $id;
     }
 
-    // Name
     public function set_name($name): void {
         $this->name = (string) $name;
     }
 
-    // CPF
     public function set_cpf($cpf): void {
         $this->cpf = (string) $cpf;
     }
 
-    // Phone
     public function set_phone($phone): void {
         $this->phone = (string) $phone;
     }
 
-    // Balance
     public function set_balance($balance): void {
-        $this->balance = (int) $balance;
+        $this->balance = (float) $balance;
     }
 
-    // Valid Until
     public function set_valid_until($valid_until): void {
         $this->valid_until = (string) $valid_until;
     }
 
-    // Notes
     public function set_notes($notes): void {
         $this->notes = (string) $notes;
     }
@@ -57,7 +49,7 @@ class Family {
         string $name = '',
         string $cpf = '',
         string $phone = '',
-        int $balance = 0,
+        float $balance = 0,
         string $valid_until = '',
         string $notes = ''
     ) {
@@ -70,90 +62,8 @@ class Family {
         $this->set_notes($notes);
     }
 
-    public static function search_by_cpf(string $cpf): ?Family {
-        $query = new WP_Query([
-            'post_type'      => MERCADO_SOLIDARIO_FAMILY_POST,
-            'posts_per_page' => 1,
-            'post_status'    => 'publish',
-            'meta_query'     => [
-                [
-                    'key'     => 'cpf',
-                    'value'   => $cpf,
-                    'compare' => '='
-                ]
-            ]
-        ]);
-
-        if ($query->have_posts()) {
-            $post = $query->posts[0];
-            return self::build_from_post($post);
-        }
-
-        return null;
-    }
-
-    public static function search_by_phone(string $phone): ?Family {
-        $query = new WP_Query([
-            'post_type'      => MERCADO_SOLIDARIO_FAMILY_POST,
-            'posts_per_page' => 1,
-            'post_status'    => 'publish',
-            'meta_query'     => [
-                [
-                    'key'     => 'phone',
-                    'value'   => $phone,
-                    'compare' => '='
-                ]
-            ]
-        ]);
-
-        if ($query->have_posts()) {
-            $post = $query->posts[0];
-            return self::build_from_post($post);
-        }
-
-        return null;
-    }
-
-    public static function search_by_id(int $post_id): ?Family {
-        $post = get_post($post_id);
-    
-        if (!$post || $post->post_type !== MERCADO_SOLIDARIO_FAMILY_POST) {
-            return null;
-        } else {
-            return self::build_from_post($post);
-        };
-    }
-
-    public static function search_all_valid_families(): array {
-        $today = current_time('Y-m-d'); // Gets current date in site timezone
-    
-        $query = new WP_Query([
-            'post_type'      => MERCADO_SOLIDARIO_FAMILY_POST,
-            'posts_per_page' => -1, // All results
-            'post_status'    => 'publish',
-            'meta_query'     => [
-                [
-                    'key'     => 'valid_until',
-                    'value'   => $today,
-                    'compare' => '>=',
-                    'type'    => 'CHAR', // date stored as string
-                ]
-            ]
-        ]);
-
-        $families = [];
-
-        if ($query->have_posts()) {
-            foreach ($query->posts as $post) {
-                $families[] = (array) self::build_from_post($post);
-            }
-        }
-    
-        return $families;
-    }
-
     // Builder from WP_Post object
-    private static function build_from_post(WP_Post $post): Family {
+    public static function build_from_post(WP_Post $post): Family {
         $id          = $post->ID;
         $name        = $post->post_title;
         $cpf         = get_post_meta($id, 'cpf', true);
@@ -165,15 +75,10 @@ class Family {
         return new Family($id, $name, $cpf, $phone, $balance, $valid_until, $notes);
     }
 
-    public function save(): bool{
-        if (empty($this->cpf)){
+    public function save(): bool {
+        if ( $this->name == '' || $this->cpf == '' || $this->phone == '' ){
             return false;
         };
-
-        // Prevent duplicates based on CPF
-        if (self::search_by_cpf($this->cpf)) {
-            return false;
-        }
 
         // Insert new post
         $post_id = wp_insert_post([

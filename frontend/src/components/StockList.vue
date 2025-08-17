@@ -8,7 +8,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="divSubpage stock">
+  <div class="divSubpage box stock">
     <div v-for="(prod, sku) in stockObj.stock.value">
       <div :key="sku" class="prodImg" @click="stockObj.addProd(sku)">
         <img :src="prod.image" :class="{'selected': stockObj.lastSku.value == sku}" width="100px" height="100px">
@@ -20,11 +20,6 @@ const props = defineProps({
 
 <style scoped>
 .stock{
-  background-color: black;
-  color: white;
-  border-radius: 12px;
-  box-sizing: border-box;
-  padding: 20px;
   height: 100%;
   flex-flow: row wrap;
   gap: 10px;

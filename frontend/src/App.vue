@@ -44,6 +44,7 @@ a:focus{
 }
 </style>
 
+
 <style>
 .divPage{
   display: flex;
@@ -56,6 +57,18 @@ a:focus{
   flex: 1;
   flex-flow: column;
   align-items: center;
+}
+
+.box{
+  background-color: black;
+  color: white;
+  box-sizing: border-box;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.box > h1 {
+  color: white;
 }
 
 @media (max-width: 768px) {

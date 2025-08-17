@@ -2,14 +2,15 @@
 
 namespace Mercado_Solidario\Model;
 use Mercado_Solidario\REST\Router;
+use WP_Error;
 use WP_REST_Request;
+use WP_Query;
+use WP_Post;
 
 // don't call the file directly
 defined( 'ABSPATH' ) || die;
 
 class Families {
-
-    public Family $family;
 
     public function __construct(){
         add_action('init', [$this, 'register_family_post_type']);
@@ -21,16 +22,46 @@ class Families {
         ]);
     }
 
+    private function search_family(WP_Query $query): ?array {
+
+        if ($query->have_posts()) {
+            $result = [];
+            foreach ($query->posts as $post) {
+                $result[] = (array) Family::build_from_post($post);
+            };
+
+            return $result;
+
+        } else {
+            return null;
+        };
+    }
+
     public function get_all_families() {
 
-        $families = Family::search_all_valid_families();
+        $today = current_time('Y-m-d'); // Gets current date in site timezone
 
-        if ($families){
+        $query = new WP_Query([
+            'post_type'      => MERCADO_SOLIDARIO_FAMILY_POST,
+            'posts_per_page' => -1, // All results
+            'post_status'    => 'publish',
+            'meta_query'     => [
+                [
+                    'key'     => 'valid_until',
+                    'value'   => $today,
+                    'compare' => '>=',
+                    'type'    => 'CHAR', // date stored as string
+                ]
+            ]
+        ]);
+
+        $families = $this->search_family($query);
+
+        if ($families) {
             return Router::success_response($families);
         } else {
             return Router::error_response('error', 'Nenhuma familia encontrada');
         };
-
     }
 
     public function post_family( WP_REST_Request $request ){
@@ -49,12 +80,79 @@ class Families {
             notes: $new_family['notes']
         );
 
-        if ( $family->save() ){
-            return Router::success_response();
-        } else {
-            return Router::error_response('erro', 'erro na hora de salvar');
+        $search = $this->search_by_cpf( $family->cpf );
+        if (is_array($search)){
+            return Router::error_response('erro', 'Família já cadastrada');
         };
 
+        $search = $this->search_by_phone( $family->phone );
+        if (is_array($search)){
+            return Router::error_response('erro', 'Família já cadastrada');
+        };
+
+        if ( $family->save() ){
+            return Router::success_response($family);
+        } else {
+            return Router::error_response('erro', 'Não foi possível salvar');
+        };
+    }
+
+    public function search_by_cpf(string $cpf) {
+        $query = new WP_Query([
+            'post_type'      => MERCADO_SOLIDARIO_FAMILY_POST,
+            'posts_per_page' => 1,
+            'post_status'    => 'publish',
+            'meta_query'     => [
+                [
+                    'key'     => 'cpf',
+                    'value'   => $cpf,
+                    'compare' => '='
+                ]
+            ]
+        ]);
+
+        $families = $this->search_family($query);
+
+        if ($families) {
+            return Router::success_response($families);
+        } else {
+            return Router::error_response('error', 'Nenhuma familia encontrada');
+        };
+
+    }
+
+    public function search_by_phone(string $phone) {
+        $query = new WP_Query([
+            'post_type'      => MERCADO_SOLIDARIO_FAMILY_POST,
+            'posts_per_page' => 1,
+            'post_status'    => 'publish',
+            'meta_query'     => [
+                [
+                    'key'     => 'phone',
+                    'value'   => $phone,
+                    'compare' => '='
+                ]
+            ]
+        ]);
+
+        $families = $this->search_family($query);
+
+        if ($families) {
+            return Router::success_response($families);
+        } else {
+            return Router::error_response('error', 'Nenhuma familia encontrada');
+        };
+    }
+
+    public static function search_by_id(int $post_id){
+        $post = get_post($post_id);
+    
+        if (!$post || $post->post_type !== MERCADO_SOLIDARIO_FAMILY_POST) {
+            return Router::error_response('error', 'Nenhuma familia encontrada');
+        } else {
+            $family = (array) Family::build_from_post($post);
+            return Router::success_response($family);
+        };
     }
 
     public function get_permission(): bool {
