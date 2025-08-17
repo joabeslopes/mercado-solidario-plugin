@@ -162,6 +162,23 @@ class Families {
         };
     }
 
+    public function delete_family( WP_REST_Request $request ) {
+        $family_id = $request['id'];
+
+        if(!$family_id){
+            return Router::error_response('erro', 'Faltou informar a família');
+        };
+
+        $response = wp_delete_post( $family_id, true );
+
+        if ($response){
+            return Router::success_response();
+        } else {
+            return Router::error_response('erro', 'Não foi possível deletar');
+        }
+
+    }
+
     public function get_permission(): bool {
         return current_user_can( 'edit_pages' );
     }

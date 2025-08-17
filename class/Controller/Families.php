@@ -16,6 +16,7 @@ class Families {
         $this->model = new Model\Families();
         add_action( 'rest_api_init', [ $this, 'register_get' ] );
         add_action( 'rest_api_init', [ $this, 'register_post' ] );
+        add_action( 'rest_api_init', [ $this, 'register_delete' ] );
     }
 
     public function register_get() {
@@ -40,6 +41,20 @@ class Families {
             [
             'methods' => 'POST',
             'callback' => [ $this->model, 'post_family' ],
+            'permission_callback' => [ $this->model, 'get_permission' ],
+            ]
+        );
+
+    }
+
+    public function register_delete() {
+
+        register_rest_route(
+            MERCADO_SOLIDARIO_REST_NAMESPACE,
+            $this->base_route,
+            [
+            'methods' => 'DELETE',
+            'callback' => [ $this->model, 'delete_family' ],
             'permission_callback' => [ $this->model, 'get_permission' ],
             ]
         );

@@ -80,3 +80,21 @@ export async function get(path) {
 
     return response;
 };
+
+export async function del(path, requestObj) {
+
+    const apiResponse = await fetch(apiNamespace + path,
+        {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                "X-WP-Nonce": nonce
+            },
+            body: JSON.stringify(requestObj)
+        }
+    );
+
+    const response = await createMyResponse(apiResponse);
+
+    return response;
+};

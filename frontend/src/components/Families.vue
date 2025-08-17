@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue';
-import { get, post } from '../js/myApiClient';
+import { get, post, del } from '../js/myApiClient';
 import showPopup from '../js/myPopup';
 
 const families = ref([]);
@@ -53,6 +53,33 @@ async function sendFamily(){
     sessionStorage.setItem('mercado-solidario-families', JSON.stringify(families.value));
 
     showPopup('Sucesso', 'Enviou nova família');
+  } else {
+    showPopup('Erro', response.message);
+  };
+
+};
+
+async function deleteFamily(id){
+  const request = {
+    'id': id
+  };
+
+  const response = await del('/families', request);
+
+  if (response.status == 200){
+
+    for (const index in families.value) {
+      const family = families.value[index];
+      
+      if (family.id == id){
+        families.value.splice(index, 1);
+      };
+    };
+
+    sessionStorage.setItem('mercado-solidario-families', JSON.stringify(families.value));
+
+    showPopup('Sucesso', 'Família deletada');
+
   } else {
     showPopup('Erro', response.message);
   };
@@ -117,6 +144,7 @@ getFamilies();
         <p>
           Observações: {{ family.notes }}
         </p>
+        <button @click="deleteFamily(family.id)">Deletar</button>
       </div>
 
     </div>
