@@ -26,7 +26,8 @@ class Families {
 
         if ($query->have_posts()) {
             $result = [];
-            foreach ($query->posts as $post) {
+            $posts = $query->get_posts();
+            foreach ($posts as $post) {
                 $result[] = (array) Family::build_from_post($post);
             };
 
@@ -39,7 +40,7 @@ class Families {
 
     public function get_all_families() {
 
-        $today = current_time('Y-m-d'); // Gets current date in site timezone
+        $today = current_time('Y-m-d');
 
         $query = new WP_Query([
             'post_type'      => MERCADO_SOLIDARIO_FAMILY_POST,
@@ -49,8 +50,7 @@ class Families {
                 [
                     'key'     => 'valid_until',
                     'value'   => $today,
-                    'compare' => '>=',
-                    'type'    => 'CHAR', // date stored as string
+                    'compare' => '>='
                 ]
             ]
         ]);
@@ -144,14 +144,21 @@ class Families {
         };
     }
 
-    public static function search_by_id(int $post_id){
-        $post = get_post($post_id);
-    
-        if (!$post || $post->post_type !== MERCADO_SOLIDARIO_FAMILY_POST) {
-            return Router::error_response('error', 'Nenhuma familia encontrada');
+    public function search_by_id(int $post_id){
+
+        $query = new WP_Query([
+            'post_type'      => MERCADO_SOLIDARIO_FAMILY_POST,
+            'posts_per_page' => 1,
+            'post_status'    => 'publish',
+            'p'              => $post_id
+        ]);
+
+        $families = $this->search_family($query);
+
+        if ($families) {
+            return Router::success_response($families);
         } else {
-            $family = (array) Family::build_from_post($post);
-            return Router::success_response($family);
+            return Router::error_response('error', 'Nenhuma familia encontrada');
         };
     }
 

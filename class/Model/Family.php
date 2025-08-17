@@ -62,7 +62,6 @@ class Family {
         $this->set_notes($notes);
     }
 
-    // Builder from WP_Post object
     public static function build_from_post(WP_Post $post): Family {
         $id          = $post->ID;
         $name        = $post->post_title;
@@ -80,7 +79,6 @@ class Family {
             return false;
         };
 
-        // Insert new post
         $post_id = wp_insert_post([
             'post_type'   => MERCADO_SOLIDARIO_FAMILY_POST,
             'post_title'  => $this->name,
@@ -91,7 +89,6 @@ class Family {
             return false;
         }
 
-        // Save post meta
         update_post_meta($post_id, 'cpf', $this->cpf);
         update_post_meta($post_id, 'phone', $this->phone);
         update_post_meta($post_id, 'balance', $this->balance);
