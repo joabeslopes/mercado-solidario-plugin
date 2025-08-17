@@ -11,6 +11,16 @@ defined( 'ABSPATH' ) || die;
 
 class Stock {
 
+    public function __construct(){
+        add_action('init', [$this, 'register_checkin_post_type']);
+    }
+
+    public function register_checkin_post_type(){
+        register_post_type(MERCADO_SOLIDARIO_CHECKIN_POST, [
+            'public' => false
+        ]);
+    }
+
     public function get_stock(): array {
 
         $args = [
@@ -96,16 +106,54 @@ class Stock {
 
             $order_id = $order->save();
 
-            return Router::success_response( [ 'order' => $order_id ] );
+            return Router::success_response( $order_id );
         } else {
             return Router::error_response('mercado_solidario_error_checkout', $messages);
         };
     }
 
     public function post_checkin( WP_REST_Request $request ) {
-        $cart = $request['cart'];
 
-        return Router::error_response('mercado_solidario_error_checkin', 'Não disponível no momento');
+        $status = 200;
+        $user = wp_get_current_user();
+        $cart = $request['cart'];
+        $checkin = new Checkin();
+
+        if (!$cart) {
+            $status = 400;
+        } else {
+            foreach ($cart as $cartProd) {
+
+                $args = [
+                    'sku' => $cartProd['sku'],
+                    'limit' => 1
+                ];
+                $query = new WC_Product_Query($args);
+
+                $result = $query->get_products();
+
+                if ($result){
+                    $product = $result[0];
+                    $checkin->add_product($product, $cartProd['quantity']);
+                } else {
+                    $status = 400;
+                };
+            };
+        };
+
+        if ($status != 200) {
+            return Router::error_response('mercado_solidario_checkin', 'Não foi possível atualizar o estoque');
+        } else {
+            $checkin->created_by = $user->user_login;
+            $checkin->cart = $cart;
+            $new_post = $checkin->save();
+            if ($new_post > 0){
+                return Router::success_response( $new_post );
+            } else {
+                return Router::error_response('mercado_solidario_checkin', 'Não foi possível atualizar o estoque');
+            };
+        };
+
     }
 
 }
