@@ -1,17 +1,42 @@
 <script setup>
 import Product from './Product.vue';
 import stockManager from '../js/stockManager';
+import SearchBar from './SearchBar.vue';
+import { ref } from 'vue';
 
 const props = defineProps({
     stockObj: stockManager,
 });
+
+const searchResult = ref({});
+
+function fsearch(input){
+    searchResult.value = {};
+    const regex = new RegExp("^"+input, "i");
+
+    Object.keys(props.stockObj.stock.value)
+    .forEach(sku => {
+        const prod = props.stockObj.stock.value[sku];
+
+        if ( prod.name.match(regex) ){
+            searchResult.value[sku] = prod;
+        };
+    });
+};
+
+function fclick(key, obj){
+  searchResult.value = {};
+  props.stockObj.addProd(key);
+};
 
 </script>
 
 <template>
 
   <div class="divSubpage box">
+    <SearchBar :searchData="searchResult" @submit="fsearch" @itemClick="fclick" />
 
+    <p>SKU</p>
     <input v-model="stockObj.searchSku.value" @keyup.enter="stockObj.addProd(stockObj.searchSku.value)"  />
 
     <p>Total: {{ stockObj.cart.value.total }}</p>
