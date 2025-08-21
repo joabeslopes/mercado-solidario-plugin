@@ -21,11 +21,13 @@ class Stock {
         ]);
     }
 
-    public function get_stock(): array {
+    public function get_stock() {
 
         $args = [
             'limit' => -1,
-            'type' => [ 'simple', 'variation' ]
+            'type' => [ 'simple', 'variation' ],
+            'orderby' => 'name',
+            'order' => 'ASC'
         ];
 
         $query = new WC_Product_Query($args);
@@ -51,6 +53,8 @@ class Stock {
                     'image' => $image_url
                 ];
             };
+        } else {
+            return Router::error_response('mercado_solidario_error_stock', 'Não foi possível encontrar o estoque');
         };
 
         return Router::success_response($stock);
