@@ -2,10 +2,10 @@
 import { post } from '../js/myApiClient';
 import showPopup from '../js/myPopup';
 import stockManager from '../js/stockManager';
-import CartList from './CartList.vue';
-import StockList from './StockList.vue';
+import CartList from '../components/CartList.vue';
+import StockList from '../components/StockList.vue';
 
-const stockObj = new stockManager('checkin');
+const stockObj = new stockManager('checkout');
 
 async function sendCart(){
 
@@ -19,11 +19,11 @@ async function sendCart(){
     'cart': userCart
   };
 
-  const response = await post( '/stock/checkin', request );
+  const response = await post( '/stock/checkout', request );
 
   if (response.status == 200) {
 
-    showPopup("Sucesso", "Estoque abastecido");
+    showPopup("Sucesso", "Compra efetuada");
 
     stockObj.clearCart();
 

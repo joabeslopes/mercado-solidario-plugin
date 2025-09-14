@@ -1,8 +1,8 @@
 import { createMemoryHistory, createRouter } from 'vue-router';
 
-import Checkout from './components/Checkout.vue';
-import Families from './components/Families.vue';
-import Checkin from './components/Checkin.vue';
+import Checkout from './pages/Checkout.vue';
+import Families from './pages/Families.vue';
+import Checkin from './pages/Checkin.vue';
 
 const routes = [
   { path: '/', redirect: { path: '/checkout' } },
