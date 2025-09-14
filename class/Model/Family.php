@@ -17,31 +17,31 @@ class Family {
     public string $notes;
 
     public function set_id($id): void {
-        $this->id = (int) $id;
+        $this->id = (int) sanitize_text_field($id);
     }
 
     public function set_name($name): void {
-        $this->name = (string) $name;
+        $this->name = sanitize_text_field($name);
     }
 
     public function set_cpf($cpf): void {
-        $this->cpf = (string) $cpf;
+        $this->cpf = sanitize_text_field($cpf);
     }
 
     public function set_phone($phone): void {
-        $this->phone = (string) $phone;
+        $this->phone = sanitize_text_field($phone);
     }
 
     public function set_balance($balance): void {
-        $this->balance = (float) $balance;
+        $this->balance = (float) sanitize_text_field($balance);
     }
 
     public function set_valid_until($valid_until): void {
-        $this->valid_until = (string) $valid_until;
+        $this->valid_until = sanitize_text_field($valid_until);
     }
 
     public function set_notes($notes): void {
-        $this->notes = (string) $notes;
+        $this->notes = sanitize_text_field($notes);
     }
 
     public function __construct(

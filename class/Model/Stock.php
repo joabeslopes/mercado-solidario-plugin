@@ -75,8 +75,11 @@ class Stock {
         } else {
             foreach ($cart as $cartProd) {
 
+                $prodSku = sanitize_text_field($cartProd['sku']);
+                $prodQuantity = (int) sanitize_text_field($cartProd['quantity']);
+
                 $args = [
-                    'sku' => $cartProd['sku'],
+                    'sku' => $prodSku,
                     'limit' => 1
                 ];
                 $query = new WC_Product_Query($args);
@@ -86,10 +89,10 @@ class Stock {
                 if ($result){
                     $product = $result[0];
 
-                    $quantity = $product->get_stock_quantity() - $cartProd['quantity'];
+                    $quantity = $product->get_stock_quantity() - $prodQuantity;
 
                     if ($quantity >= 0) {
-                        $order->add_product( $product, $cartProd['quantity'] );
+                        $order->add_product( $product, $prodQuantity );
                     } else {
                         $status = 400;
                         $messages[] = $product->get_name() . ' sem estoque suficiente';
@@ -97,7 +100,7 @@ class Stock {
 
                 } else {
                     $status = 400;
-                    $messages[] = $cartProd['sku'] . ' não existe';
+                    $messages[] = $prodSku . ' não existe';
                 };
             };
         };
@@ -128,8 +131,11 @@ class Stock {
         } else {
             foreach ($cart as $cartProd) {
 
+                $prodSku = sanitize_text_field($cartProd['sku']);
+                $prodQuantity = (int) sanitize_text_field($cartProd['quantity']);
+
                 $args = [
-                    'sku' => $cartProd['sku'],
+                    'sku' => $prodSku,
                     'limit' => 1
                 ];
                 $query = new WC_Product_Query($args);
@@ -138,7 +144,7 @@ class Stock {
 
                 if ($result){
                     $product = $result[0];
-                    $checkin->add_product($product, $cartProd['quantity']);
+                    $checkin->add_product($product, $prodQuantity);
                 } else {
                     $status = 400;
                 };
