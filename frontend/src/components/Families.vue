@@ -103,7 +103,7 @@ getFamilies();
 <template>
   <div class="divPage">
 
-    <div class="divSubpage box">
+    <div class="divSubpage blackPage borderRound">
 
       <h1>Nova família</h1>
       <div>
@@ -125,7 +125,7 @@ getFamilies();
 
     </div>
 
-    <div class="divSubpage box">
+    <div class="divSubpage blackPage borderRound">
 
       <h1>Famílias atuais</h1>
       <div v-for="family in families">

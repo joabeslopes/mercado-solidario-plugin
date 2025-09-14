@@ -8,10 +8,10 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="divSubpage box stock">
+  <div class="divSubpage blackPage borderRound stock">
     <div v-for="(prod, sku) in stockObj.stock.value">
       <div :key="sku" class="prodImg" @click="stockObj.addProd(sku)">
-        <img :src="prod.image" :class="{'selected': stockObj.lastSku.value == sku}" width="100px" height="100px">
+        <img :src="prod.image" :class="{'selected': stockObj.lastSku.value == sku, 'borderRound': true}" width="100px" height="100px">
         <p>{{prod.name}}</p>
       </div>
     </div>
@@ -37,7 +37,7 @@ const props = defineProps({
 }
 
 .selected{
-  outline: 5px solid greenyellow;
+  outline: 5px solid yellow;
 }
 
 </style>

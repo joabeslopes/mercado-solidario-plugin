@@ -1,44 +1,23 @@
 <script setup>
 import Product from './Product.vue';
 import stockManager from '../js/stockManager';
-import SearchBar from './SearchBar.vue';
-import { ref } from 'vue';
+import SearchName from './SearchName.vue';
+import SearchSku from './SearchSku.vue';
 
 const props = defineProps({
     stockObj: stockManager,
 });
 
-const searchResult = ref({});
-
-function fsearch(input){
-    searchResult.value = {};
-    const regex = new RegExp("^"+input, "i");
-
-    Object.keys(props.stockObj.stock.value)
-    .forEach(sku => {
-        const prod = props.stockObj.stock.value[sku];
-
-        if ( prod.name.match(regex) ){
-            searchResult.value[sku] = prod;
-        };
-    });
-};
-
-function fclick(key, obj){
-  searchResult.value = {};
-  props.stockObj.addProd(key);
-};
-
 </script>
 
 <template>
 
-  <div class="divSubpage box">
-    <SearchBar :searchData="searchResult" @submit="fsearch" @itemClick="fclick" />
+  <div class="divSubpage blackPage borderRound">
 
-    <p>SKU</p>
-    <input v-model="stockObj.searchSku.value" @keyup.enter="stockObj.addProd(stockObj.searchSku.value)"  />
+    <SearchName :stockObj="stockObj" />
 
+    <SearchSku :stockObj="stockObj" />
+    
     <p>Total: {{ stockObj.cart.value.total }}</p>
 
     <button @click="$emit('send')">Finalizar</button>
@@ -72,15 +51,6 @@ function fclick(key, obj){
   .divSubpage {
     order: 1;
   }
-}
-
-input {
-  width: 50%;
-  height: 30px;
-}
-
-input:focus{
-  outline: 5px solid greenyellow;
 }
 
 table{

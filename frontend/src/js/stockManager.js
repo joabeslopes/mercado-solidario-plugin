@@ -6,8 +6,8 @@ export default class stockManager {
 
   stock = ref({});
   cart = ref({});
-  searchSku = ref('');
   lastSku = ref('');
+  namesSearch = ref({});
 
   emptyCart = {
     'productSku': {},
@@ -82,7 +82,6 @@ export default class stockManager {
       prod.quantity = this.getQuantity(sku) + 1;
     };
 
-    this.searchSku.value = '';
     this.lastSku.value = sku;
 
     this.updateCartTotal();
@@ -180,6 +179,25 @@ export default class stockManager {
     };
 
     return userCart;
+  };
+
+  searchName(name){
+    this.clearNamesSearch();
+
+    const regex = new RegExp(name, "i");
+
+    Object.keys(this.stock.value)
+    .forEach(sku => {
+        const prod = this.stock.value[sku];
+
+        if ( prod.name.match(regex) ){
+          this.namesSearch.value[sku] = prod;
+        };
+    });
+  };
+
+  clearNamesSearch(){
+    this.namesSearch.value = {};
   };
 
 };

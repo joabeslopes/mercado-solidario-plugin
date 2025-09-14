@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-    <nav>
+    <nav class="borderRound">
       <RouterLink to="/checkout">
         <a> Caixa </a>
       </RouterLink>
@@ -29,8 +29,6 @@ nav{
   height: 60px;
   display: flex;
   justify-content: center;
-  border-radius: 12px;
-  box-sizing: border-box;
 }
 
 a{
@@ -59,15 +57,13 @@ a:focus{
   align-items: center;
 }
 
-.box{
+.blackPage{
   background-color: black;
   color: white;
-  box-sizing: border-box;
-  border-radius: 12px;
   padding: 20px;
 }
 
-.box > h1 {
+.blackPage > h1 {
   color: white;
 }
 
@@ -75,5 +71,10 @@ a:focus{
   .divPage{
     flex-direction: column;
   }
+}
+
+.borderRound {
+  box-sizing: border-box;
+  border-radius: 12px;
 }
 </style>
