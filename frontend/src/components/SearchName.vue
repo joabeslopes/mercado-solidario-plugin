@@ -26,12 +26,11 @@ function handleClick(sku){
 
 <template>
 
-  <div class="searchBar">
-    <p>Pesquisa por nome</p>
+  <div class="searchBox">
     <input v-model="userInput" @input="handleInput" />
     <ul v-if="userInput">
       <li v-for="(obj, sku) in stockObj.namesSearch.value">
-        <a href="#" @click="handleClick(sku)"> {{stockObj.namesSearch.value[sku].name}} </a>
+        <span @click="handleClick(sku)">{{stockObj.namesSearch.value[sku].name}}</span>
       </li>
     </ul>
   </div>
@@ -40,25 +39,18 @@ function handleClick(sku){
 
 <style scoped>
 
-.searchBar{
-  display: flex;
-  flex-flow: column;
-  align-items: center;
-  width: 50%;
-}
-
-input{
-  width: 100%;
-  height: 30px;
-}
-
 ul{
   background-color: white;
   margin: 0;
   width: 100%;
   max-height: 200px;
   overflow: scroll;
-  padding: 0;
+}
+
+.searchBox span{
+  cursor: pointer;
+  color: #007bff;
+  padding: 5px;
 }
 
 </style>

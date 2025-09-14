@@ -16,25 +16,12 @@ function handleInput(evt){
 </script>
 
 <template>
-  <div class="searchBar">
-    <p>Leitor etiqueta</p>
+  <div class="searchBox">
     <input v-model="userInput" @keyup.enter="handleInput" />
   </div>
 </template>
 
 <style scoped>
-
-.searchBar{
-  display: flex;
-  flex-flow: column;
-  align-items: center;
-  width: 50%;
-}
-
-input {
-  width: 100%;
-  height: 30px;
-}
 
 input:focus{
   outline: 5px solid yellow;

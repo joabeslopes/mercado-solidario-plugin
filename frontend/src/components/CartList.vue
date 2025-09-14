@@ -1,8 +1,7 @@
 <script setup>
 import Product from './Product.vue';
 import stockManager from '../js/stockManager';
-import SearchName from './SearchName.vue';
-import SearchSku from './SearchSku.vue';
+import SearchBar from './SearchBar.vue';
 
 const props = defineProps({
     stockObj: stockManager,
@@ -14,9 +13,7 @@ const props = defineProps({
 
   <div class="divSubpage blackPage borderRound">
 
-    <SearchName :stockObj="stockObj" />
-
-    <SearchSku :stockObj="stockObj" />
+    <SearchBar :stockObj="stockObj" />
     
     <p>Total: ${{ stockObj.cart.value.total }}</p>
 
@@ -36,7 +33,7 @@ const props = defineProps({
                 <Product :key="sku"
                         :sku="sku"
                         :product="stockObj.cart.value.productSku[sku]" 
-                        :stockObj="stockObj"  />
+                        :stockObj="stockObj" />
             </tr>
         </tbody>
     </table>
