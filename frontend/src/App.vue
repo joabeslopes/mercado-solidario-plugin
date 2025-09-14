@@ -1,15 +1,9 @@
 <template>
   <div class="app">
     <nav class="borderRound">
-      <RouterLink to="/checkout">
-        <a> Caixa </a>
-      </RouterLink>
-      <RouterLink to="/families">
-        <a> Famílias </a>
-      </RouterLink>
-      <RouterLink to="/checkin">
-        <a> Entrada estoque </a>
-      </RouterLink>
+      <RouterLink to="/checkout">Caixa</RouterLink>
+      <RouterLink to="/families">Famílias</RouterLink>
+      <RouterLink to="/checkin">Entrada estoque</RouterLink>
     </nav>
 
     <RouterView />
@@ -39,6 +33,10 @@ a{
 
 a:focus{
   box-shadow: none;
+}
+
+.router-link-exact-active {
+  color: #c61c8bd4;
 }
 </style>
 
