@@ -42,10 +42,26 @@ async function sendCart(){
 
 <div class="divPage">
 
-    <StockList :stockObj="stockObj" />
+  <StockList class="stock" :stockObj="stockObj" />
 
-    <CartList :stockObj="stockObj" @send="sendCart" />
+  <CartList class="cart" :stockObj="stockObj" @send="sendCart" />
 
 </div>
 
 </template>
+
+<style scoped>
+
+@media (max-width: 768px) {
+  .cart {
+    order: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .stock {
+    order: 2;
+  }
+}
+
+</style>

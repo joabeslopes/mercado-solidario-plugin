@@ -59,6 +59,24 @@ export default class stockManager {
     localStorage.setItem(this.cartSessionStorage, JSON.stringify(this.cart.value));
   };
 
+  addSkuList(sku){
+    const prodSearch = this.stock.value[sku];
+    if (!prodSearch){
+      return null;
+    };
+
+    this.delSkuList(sku);
+    this.cart.value.skuList.unshift(sku);
+  };
+
+  delSkuList(sku){
+
+    this.cart.value.skuList = this.cart.value.skuList.filter(
+      item => item != sku
+    );
+
+  };
+
   addProd(sku){
 
     const prodSearch = this.stock.value[sku];
@@ -77,12 +95,12 @@ export default class stockManager {
 
     if (!prod) {
       this.cart.value.productSku[sku] = newProduct;
-      this.cart.value.skuList.unshift(sku);
     } else {
       prod.quantity = this.getQuantity(sku) + 1;
     };
 
     this.lastSku.value = sku;
+    this.addSkuList(sku);
 
     this.updateCartTotal();
   };
@@ -113,9 +131,7 @@ export default class stockManager {
 
     delete this.cart.value.productSku[sku];
 
-    const prodIndex = this.cart.value.skuList.indexOf(sku);
-
-    this.cart.value.skuList.splice(prodIndex, 1);
+    this.delSkuList(sku);
 
     this.updateCartTotal();
   };

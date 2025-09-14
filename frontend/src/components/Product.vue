@@ -24,7 +24,7 @@ function quantityInput(evt){
     <td>
         <button @click="stockObj.subProd(sku)">-</button>
     </td>
-    <td>
+    <td class="del">
         <button @click="stockObj.delProd(sku)">Delete</button>  
     </td>
 
@@ -33,5 +33,9 @@ function quantityInput(evt){
 <style scoped>
 input{
     width: 60%;
+}
+
+.del > button{
+    width: 100%;
 }
 </style>

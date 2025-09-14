@@ -18,9 +18,9 @@ const props = defineProps({
 
     <SearchSku :stockObj="stockObj" />
     
-    <p>Total: {{ stockObj.cart.value.total }}</p>
+    <p>Total: ${{ stockObj.cart.value.total }}</p>
 
-    <button @click="$emit('send')">Finalizar</button>
+    <button @click="$emit('send')">Enviar</button>
 
     <table>
         <thead>
@@ -29,7 +29,7 @@ const props = defineProps({
             <th class="quantidade">Qtd.</th>
             <th class="add"></th>
             <th class="sub"></th>
-            <th class="del"></th>
+            <th class="del"><button @click="stockObj.clearCart()">Limpar carrinho</button></th>
         </thead>
         <tbody>
             <tr v-for="sku in stockObj.cart.value.skuList">
@@ -46,12 +46,6 @@ const props = defineProps({
 </template>
 
 <style scoped>
-
-@media (max-width: 768px) {
-  .divSubpage {
-    order: 1;
-  }
-}
 
 table{
     border-collapse: collapse;
@@ -85,6 +79,10 @@ tr{
 
 .del{
     width: 10%;
+}
+
+.del > button{
+    width: 100%;
 }
 
 </style>
