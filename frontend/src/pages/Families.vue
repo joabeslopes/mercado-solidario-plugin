@@ -30,8 +30,6 @@ async function getFamilies(){
     if (response.status == 200){
       families.value = response.data;
       sessionStorage.setItem('mercado-solidario-families', JSON.stringify(response.data));
-    } else {
-      showPopup('Erro', response.message);
     };
 
   };
