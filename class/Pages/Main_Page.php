@@ -33,6 +33,16 @@ class Main_Page {
             $this->icon_url
         );
 
+        add_submenu_page(
+            $this->menu_slug,
+            'Geral',
+            'Geral',
+            $this->capability,
+            $this->menu_slug,
+            [$this,'show_page'],
+            0
+        );
+
         add_action( "admin_print_scripts-$menupage", [$this,'print_settings'] );
 
     }

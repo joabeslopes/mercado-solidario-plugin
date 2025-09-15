@@ -13,12 +13,67 @@ class Stock {
 
     public function __construct(){
         add_action('init', [$this, 'register_checkin_post_type']);
+        add_action('add_meta_boxes', [$this, 'add_metaboxes']);
     }
 
     public function register_checkin_post_type(){
         register_post_type(MERCADO_SOLIDARIO_CHECKIN_POST, [
-            'public' => false
+            'public' => false,
+            'show_ui' => true,
+            'supports' => ['title'],
+            'show_in_menu' => 'mercado-solidario',
+            'capabilities' => [
+                'create_posts' => 'do_not_allow'
+            ],
+            'map_meta_cap' => true,
+            'labels' => [
+                'name' => 'Entradas de estoque'
+            ]
         ]);
+    }
+
+    public function add_metaboxes() {
+        add_meta_box(
+            'ms_checkin_meta',
+            'Detalhes da entrada',
+            [$this, 'render_metabox'],
+            MERCADO_SOLIDARIO_CHECKIN_POST,
+            'side'
+        );
+    }
+
+    public function render_metabox($post) {
+        $created_by  = get_post_meta($post->ID, 'created_by', true);
+        $notes_json  = get_post_meta($post->ID, 'notes', true);
+        $notes = json_decode($notes_json);
+
+        ?>
+        <p>
+            <label><strong>Criado por:</strong></label><br>
+            <label><?php echo esc_attr($created_by);?></label><br>
+        </p>
+        <ul>
+        <?php
+            foreach($notes as $note){
+                $name         = $note->name;
+                $old_quantity = $note->old_quantity;
+                $new_quantity = $note->new_quantity;
+                ?>
+                <li class="card">
+                    <p>
+                        <label><strong>Produto:</strong></label><br>
+                        <label><?php echo esc_attr($name);?></label><br>
+                        <label><strong>Quantidade antiga:</strong></label><br>
+                        <label><?php echo esc_attr($old_quantity); ?></label><br>
+                        <label><strong>Nova quantidade:</strong></label><br>
+                        <label><?php echo esc_attr($new_quantity);?></label><br>
+                    </p>
+                </li>
+                <?php
+            }
+        ?>
+        </ul>
+        <?php
     }
 
     public function get_stock() {

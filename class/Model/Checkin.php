@@ -9,6 +9,7 @@ defined( 'ABSPATH' ) || die;
 class Checkin {
 
     public string $created_by;
+    public string $supplier;
     public array $cart;
     private array $products;
     private array $notes;
@@ -18,8 +19,7 @@ class Checkin {
         $new_quantity = $product->get_stock_quantity() + $quantity;
 
         $this->notes[] = [
-            'id' => $product->get_id(),
-            'sku' => $product->get_sku(),
+            'name' => $product->get_name(),
             'old_quantity' => $product->get_stock_quantity(),
             'new_quantity' => $new_quantity
         ];
@@ -33,12 +33,17 @@ class Checkin {
 
         $post_id = wp_insert_post([
             'post_type'   => MERCADO_SOLIDARIO_CHECKIN_POST,
-            'post_status' => 'publish',
+            'post_status' => 'publish'
         ]);
 
         if (is_wp_error($post_id)) {
             return 0;
         };
+
+        wp_update_post([
+            'ID' => $post_id,
+            'post_title' => $post_id,
+        ]);
 
         update_post_meta($post_id, 'created_by', $this->created_by);
         update_post_meta($post_id, 'cart', json_encode($this->cart) );
