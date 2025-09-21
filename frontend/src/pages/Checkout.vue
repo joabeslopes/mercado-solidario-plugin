@@ -19,7 +19,7 @@ async function sendCart(){
     'cart': userCart
   };
 
-  const response = await post( '/stock/checkout', request );
+  const response = await post( '/checkout', request );
 
   if (response.status == 200) {
 

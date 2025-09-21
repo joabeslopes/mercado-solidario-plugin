@@ -1,7 +1,7 @@
 <script setup>
 import Product from './Product.vue';
 import stockManager from '../js/stockManager';
-import SearchBar from './SearchBar.vue';
+import SearchProd from './SearchProd.vue';
 
 const props = defineProps({
     stockObj: stockManager,
@@ -13,7 +13,7 @@ const props = defineProps({
 
   <div class="divSubpage blackPage borderRound">
 
-    <SearchBar :stockObj="stockObj" />
+    <SearchProd :stockObj="stockObj" />
     
     <p>Total: ${{ stockObj.cart.value.total }}</p>
 
