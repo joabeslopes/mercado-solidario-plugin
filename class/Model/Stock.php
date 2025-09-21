@@ -4,79 +4,13 @@ namespace Mercado_Solidario\Model;
 use Mercado_Solidario\REST\Router;
 use WC_Product_Query;
 use WP_REST_Request;
-use WC_Order;
 
 // don't call the file directly
 defined( 'ABSPATH' ) || die;
 
 class Stock {
 
-    public function __construct(){
-        add_action('init', [$this, 'register_checkin_post_type']);
-        add_action('add_meta_boxes', [$this, 'add_metaboxes']);
-    }
-
-    public function register_checkin_post_type(){
-        register_post_type(MERCADO_SOLIDARIO_CHECKIN_POST, [
-            'public' => false,
-            'show_ui' => true,
-            'supports' => ['title'],
-            'show_in_menu' => 'mercado-solidario',
-            'capabilities' => [
-                'create_posts' => 'do_not_allow'
-            ],
-            'map_meta_cap' => true,
-            'labels' => [
-                'name' => 'Entradas de estoque'
-            ]
-        ]);
-    }
-
-    public function add_metaboxes() {
-        add_meta_box(
-            'ms_checkin_meta',
-            'Detalhes da entrada',
-            [$this, 'render_metabox'],
-            MERCADO_SOLIDARIO_CHECKIN_POST,
-            'side'
-        );
-    }
-
-    public function render_metabox($post) {
-        $created_by  = get_post_meta($post->ID, 'created_by', true);
-        $notes_json  = get_post_meta($post->ID, 'notes', true);
-        $notes = json_decode($notes_json);
-
-        ?>
-        <p>
-            <label><strong>Criado por:</strong></label><br>
-            <label><?php echo esc_attr($created_by);?></label><br>
-        </p>
-        <ul>
-        <?php
-            foreach($notes as $note){
-                $name         = $note->name;
-                $old_quantity = $note->old_quantity;
-                $new_quantity = $note->new_quantity;
-                ?>
-                <li class="card">
-                    <p>
-                        <label><strong>Produto:</strong></label><br>
-                        <label><?php echo esc_attr($name);?></label><br>
-                        <label><strong>Quantidade antiga:</strong></label><br>
-                        <label><?php echo esc_attr($old_quantity); ?></label><br>
-                        <label><strong>Nova quantidade:</strong></label><br>
-                        <label><?php echo esc_attr($new_quantity);?></label><br>
-                    </p>
-                </li>
-                <?php
-            }
-        ?>
-        </ul>
-        <?php
-    }
-
-    public function get_stock() {
+    public function get_all() {
 
         $args = [
             'limit' => -1,
@@ -113,112 +47,6 @@ class Stock {
         };
 
         return Router::success_response($stock);
-    }
-
-    public function post_checkout( WP_REST_Request $request ) {
-
-        $status = 200;
-        $messages = [];
-
-        $order = new WC_Order();
-        $user = wp_get_current_user();
-
-        $cart = $request['cart'];
-
-        if (!$cart) {
-            $status = 400;
-        } else {
-            foreach ($cart as $cartProd) {
-
-                $prodSku = sanitize_text_field($cartProd['sku']);
-                $prodQuantity = (int) sanitize_text_field($cartProd['quantity']);
-
-                $args = [
-                    'sku' => $prodSku,
-                    'limit' => 1
-                ];
-                $query = new WC_Product_Query($args);
-
-                $result = $query->get_products();
-
-                if ($result){
-                    $product = $result[0];
-
-                    $quantity = $product->get_stock_quantity() - $prodQuantity;
-
-                    if ($quantity >= 0) {
-                        $order->add_product( $product, $prodQuantity );
-                    } else {
-                        $status = 400;
-                        $messages[] = $product->get_name() . ' sem estoque suficiente';
-                    };
-
-                } else {
-                    $status = 400;
-                    $messages[] = $prodSku . ' não existe';
-                };
-            };
-        };
-
-        if ($status == 200) {
-            $order->set_created_via( 'admin' );
-            $order->calculate_totals();
-            $order->set_status('completed', 'Mercado Solidario');
-            $order->add_order_note( 'Criado por '.$user->user_login );
-
-            $order_id = $order->save();
-
-            return Router::success_response( $order_id );
-        } else {
-            return Router::error_response('mercado_solidario_error_checkout', $messages);
-        };
-    }
-
-    public function post_checkin( WP_REST_Request $request ) {
-
-        $status = 200;
-        $user = wp_get_current_user();
-        $cart = $request['cart'];
-        $checkin = new Checkin();
-
-        if (!$cart) {
-            $status = 400;
-        } else {
-            foreach ($cart as $cartProd) {
-
-                $prodSku = sanitize_text_field($cartProd['sku']);
-                $prodQuantity = (int) sanitize_text_field($cartProd['quantity']);
-
-                $args = [
-                    'sku' => $prodSku,
-                    'limit' => 1
-                ];
-                $query = new WC_Product_Query($args);
-
-                $result = $query->get_products();
-
-                if ($result){
-                    $product = $result[0];
-                    $checkin->add_product($product, $prodQuantity);
-                } else {
-                    $status = 400;
-                };
-            };
-        };
-
-        if ($status != 200) {
-            return Router::error_response('mercado_solidario_checkin', 'Não foi possível atualizar o estoque');
-        } else {
-            $checkin->created_by = $user->user_login;
-            $checkin->cart = $cart;
-            $new_post = $checkin->save();
-            if ($new_post > 0){
-                return Router::success_response( $new_post );
-            } else {
-                return Router::error_response('mercado_solidario_checkin', 'Não foi possível atualizar o estoque');
-            };
-        };
-
     }
 
 }

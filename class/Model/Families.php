@@ -12,16 +12,6 @@ defined( 'ABSPATH' ) || die;
 
 class Families {
 
-    public function __construct(){
-        add_action('init', [$this, 'register_family_post_type']);
-    }
-
-    public function register_family_post_type(){
-        register_post_type(MERCADO_SOLIDARIO_FAMILY_POST, [
-            'public' => false
-        ]);
-    }
-
     private function search_family(WP_Query $query): ?array {
 
         if ($query->have_posts()) {
@@ -38,7 +28,7 @@ class Families {
         };
     }
 
-    public function get_all_families() {
+    public function get_all() {
 
         $today = current_time('Y-m-d');
 
@@ -64,7 +54,7 @@ class Families {
         };
     }
 
-    public function post_family( WP_REST_Request $request ){
+    public function post( WP_REST_Request $request ){
         $new_family = $request['newFamily'];
 
         if(!$new_family){
@@ -95,6 +85,23 @@ class Families {
         } else {
             return Router::error_response('erro', 'Não foi possível salvar');
         };
+    }
+
+    public function delete( WP_REST_Request $request ) {
+        $family_id = $request['id'];
+
+        if(!$family_id){
+            return Router::error_response('erro', 'Faltou informar a família');
+        };
+
+        $response = wp_delete_post( $family_id, true );
+
+        if ($response){
+            return Router::success_response();
+        } else {
+            return Router::error_response('erro', 'Não foi possível deletar');
+        }
+
     }
 
     public function search_by_cpf(string $cpf) {
@@ -160,23 +167,6 @@ class Families {
         } else {
             return Router::error_response('error', 'Nenhuma familia encontrada');
         };
-    }
-
-    public function delete_family( WP_REST_Request $request ) {
-        $family_id = $request['id'];
-
-        if(!$family_id){
-            return Router::error_response('erro', 'Faltou informar a família');
-        };
-
-        $response = wp_delete_post( $family_id, true );
-
-        if ($response){
-            return Router::success_response();
-        } else {
-            return Router::error_response('erro', 'Não foi possível deletar');
-        }
-
     }
 
 }

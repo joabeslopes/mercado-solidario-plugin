@@ -6,14 +6,14 @@ use Mercado_Solidario\Model;
 // don't call the file directly
 defined( 'ABSPATH' ) || die;
 
-class Stock extends Base{
+class Checkout extends Base{
 
     public function __construct(){
 
-        $this->model = new Model\Stock();
-        $this->base_route = 'stock';
+        $this->model = new Model\Checkout();
+        $this->base_route = 'checkout';
 
-        $this->register('get');
+        $this->register('post');
     }
 
 };

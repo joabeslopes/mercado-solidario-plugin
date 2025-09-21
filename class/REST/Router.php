@@ -20,6 +20,8 @@ class Router{
     public function __construct(){
         new Controller\Stock();
         new Controller\Families();
+        new Controller\Checkin();
+        new Controller\Checkout();
     }
 
 };

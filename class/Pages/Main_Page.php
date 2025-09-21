@@ -7,11 +7,11 @@ defined( 'ABSPATH' ) || die;
 
 class Main_Page {
 
-    private string $page_title = 'Mercado Solidario';
-    private string $menu_title = 'Mercado Solidario';
-    private string $capability = MERCADO_SOLIDARIO_CAPABILITY;
-    private string $menu_slug = 'mercado-solidario';
-    private string $icon_url = MERCADO_SOLIDARIO_URL.'/frontend/assets/icon-mercado-solidario.svg';
+    public static string $page_title = 'Mercado Solidario';
+    public static string $menu_title = 'Mercado Solidario';
+    public static string $capability = MERCADO_SOLIDARIO_CAPABILITY;
+    public static string $menu_slug = 'mercado-solidario';
+    public static string $icon_url = MERCADO_SOLIDARIO_URL.'/frontend/assets/icon-mercado-solidario.svg';
 
     public function __construct() {
         add_action('admin_menu',[$this,'create_page']);
@@ -25,20 +25,20 @@ class Main_Page {
     public function create_page() {
 
         $menupage = add_menu_page(
-            $this->page_title,
-            $this->menu_title,
-            $this->capability,
-            $this->menu_slug,
+            self::$page_title,
+            self::$menu_title,
+            self::$capability,
+            self::$menu_slug,
             [$this,'show_page'],
-            $this->icon_url
+            self::$icon_url
         );
 
         add_submenu_page(
-            $this->menu_slug,
+            self::$menu_slug,
             'Geral',
             'Geral',
-            $this->capability,
-            $this->menu_slug,
+            self::$capability,
+            self::$menu_slug,
             [$this,'show_page'],
             0
         );

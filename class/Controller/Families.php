@@ -6,60 +6,23 @@ use Mercado_Solidario\Model;
 // don't call the file directly
 defined( 'ABSPATH' ) || die;
 
-class Families {
-
-    public string $base_route = 'families';
-    public Model\Families $model;
+class Families extends Base{
 
     public function __construct(){
 
         $this->model = new Model\Families();
-        add_action( 'rest_api_init', [ $this, 'register_get' ] );
-        add_action( 'rest_api_init', [ $this, 'register_post' ] );
-        add_action( 'rest_api_init', [ $this, 'register_delete' ] );
+        $this->base_route = 'families';
+
+        add_action('init', [$this, 'register_family_post_type']);
+        $this->register('get');
+        $this->register('post');
+        $this->register('delete');
     }
 
-    public function get_permission(){
-        return current_user_can( MERCADO_SOLIDARIO_CAPABILITY );
+    public function register_family_post_type(){
+        register_post_type(MERCADO_SOLIDARIO_FAMILY_POST, [
+            'public' => false
+        ]);
     }
 
-    public function register_get() {
-
-        register_rest_route(
-            MERCADO_SOLIDARIO_REST_NAMESPACE,
-            $this->base_route,
-            [
-            'methods' => 'GET',
-            'callback' => [ $this->model, 'get_all_families' ],
-            'permission_callback' => [ $this, 'get_permission' ],
-            ]
-        );
-    }
-
-    public function register_post() {
-
-        register_rest_route(
-            MERCADO_SOLIDARIO_REST_NAMESPACE,
-            $this->base_route,
-            [
-            'methods' => 'POST',
-            'callback' => [ $this->model, 'post_family' ],
-            'permission_callback' => [ $this, 'get_permission' ],
-            ]
-        );
-    }
-
-    public function register_delete() {
-
-        register_rest_route(
-            MERCADO_SOLIDARIO_REST_NAMESPACE,
-            $this->base_route,
-            [
-            'methods' => 'DELETE',
-            'callback' => [ $this->model, 'delete_family' ],
-            'permission_callback' => [ $this, 'get_permission' ],
-            ]
-        );
-    }
-
-}
+};
