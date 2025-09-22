@@ -1,6 +1,7 @@
 <?php
 
 namespace Mercado_Solidario\Model;
+use Mercado_Solidario\Controller;
 use WP_Post;
 
 // don't call the file directly
@@ -80,7 +81,7 @@ class Family {
         };
 
         $post_id = wp_insert_post([
-            'post_type'   => MERCADO_SOLIDARIO_FAMILY_POST,
+            'post_type'   => Controller\Families::$post_type,
             'post_title'  => $this->name,
             'post_status' => 'publish',
         ]);

@@ -4,6 +4,7 @@
       <RouterLink to="/checkout">Caixa</RouterLink>
       <RouterLink to="/families">Famílias</RouterLink>
       <RouterLink to="/checkin">Entrada estoque</RouterLink>
+      <RouterLink to="/suppliers">Fornecedores</RouterLink>
     </nav>
 
     <RouterView />

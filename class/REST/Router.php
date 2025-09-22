@@ -22,6 +22,7 @@ class Router{
         new Controller\Families();
         new Controller\Checkin();
         new Controller\Checkout();
+        new Controller\Supplier();
     }
 
 };
