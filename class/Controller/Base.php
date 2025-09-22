@@ -7,7 +7,8 @@ defined( 'ABSPATH' ) || die;
 
 class Base {
 
-    public string $base_route = '';
+    public static string $post_type;
+    public string $base_route;
     public object $model;
 
     public function get_permission(){

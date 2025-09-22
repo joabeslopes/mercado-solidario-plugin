@@ -2,6 +2,7 @@
 
 namespace Mercado_Solidario\Model;
 use Mercado_Solidario\REST\Router;
+use Mercado_Solidario\Controller;
 use WC_Product;
 use WP_Post;
 use WC_Product_Query;
@@ -36,7 +37,7 @@ class Checkin {
     public function save(){
 
         $post_id = wp_insert_post([
-            'post_type'   => MERCADO_SOLIDARIO_CHECKIN_POST,
+            'post_type'   => Controller\Checkin::$post_type,
             'post_status' => 'publish'
         ]);
 

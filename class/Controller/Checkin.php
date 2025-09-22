@@ -13,13 +13,14 @@ class Checkin extends Base{
 
         $this->model = new Model\Checkin();
         $this->base_route = 'checkin';
+        self::$post_type = MERCADO_SOLIDARIO_POST_PREFIX.'checkin';
 
         add_action('init', [$this, 'register_checkin_post_type']);
         $this->register('post');
     }
 
     public function register_checkin_post_type() {
-        register_post_type(MERCADO_SOLIDARIO_CHECKIN_POST, [
+        register_post_type(self::$post_type, [
             'public' => false,
             'show_ui' => true,
             'supports' => ['title'],

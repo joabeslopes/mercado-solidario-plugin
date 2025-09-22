@@ -2,7 +2,8 @@
 
 namespace Mercado_Solidario\Pages;
 use WP_Post;
-use Mercado_Solidario\Model\Checkin;
+use Mercado_Solidario\Model;
+use Mercado_Solidario\Controller;
 
 // don't call the file directly
 defined( 'ABSPATH' ) || die;
@@ -18,13 +19,13 @@ class Checkin_Post {
             'ms_checkin_meta',
             'Detalhes da entrada',
             [$this, 'render_metabox'],
-            MERCADO_SOLIDARIO_CHECKIN_POST,
+            Controller\Checkin::$post_type,
             'side'
         );
     }
 
     public function render_metabox(WP_Post $post) {
-        $checkin = Checkin::build_from_post($post)
+        $checkin = Model\Checkin::build_from_post($post)
 
         ?>
         <p>

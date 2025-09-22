@@ -8,6 +8,8 @@ defined( 'ABSPATH' ) || die;
 
 class Families extends Base{
 
+    public static string $post_type = MERCADO_SOLIDARIO_POST_PREFIX.'family';
+
     public function __construct(){
 
         $this->model = new Model\Families();
@@ -20,7 +22,7 @@ class Families extends Base{
     }
 
     public function register_family_post_type(){
-        register_post_type(MERCADO_SOLIDARIO_FAMILY_POST, [
+        register_post_type(self::$post_type, [
             'public' => false
         ]);
     }

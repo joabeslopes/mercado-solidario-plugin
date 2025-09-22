@@ -2,6 +2,7 @@
 
 namespace Mercado_Solidario\Model;
 use Mercado_Solidario\REST\Router;
+use Mercado_Solidario\Controller;
 use WP_Error;
 use WP_REST_Request;
 use WP_Query;
@@ -33,7 +34,7 @@ class Families {
         $today = current_time('Y-m-d');
 
         $query = new WP_Query([
-            'post_type'      => MERCADO_SOLIDARIO_FAMILY_POST,
+            'post_type'      => Controller\Families::$post_type,
             'posts_per_page' => -1, // All results
             'post_status'    => 'publish',
             'meta_query'     => [
@@ -106,7 +107,7 @@ class Families {
 
     public function search_by_cpf(string $cpf) {
         $query = new WP_Query([
-            'post_type'      => MERCADO_SOLIDARIO_FAMILY_POST,
+            'post_type'      => Controller\Families::$post_type,
             'posts_per_page' => 1,
             'post_status'    => 'publish',
             'meta_query'     => [
@@ -130,7 +131,7 @@ class Families {
 
     public function search_by_phone(string $phone) {
         $query = new WP_Query([
-            'post_type'      => MERCADO_SOLIDARIO_FAMILY_POST,
+            'post_type'      => Controller\Families::$post_type,
             'posts_per_page' => 1,
             'post_status'    => 'publish',
             'meta_query'     => [
@@ -154,7 +155,7 @@ class Families {
     public function search_by_id(int $post_id){
 
         $query = new WP_Query([
-            'post_type'      => MERCADO_SOLIDARIO_FAMILY_POST,
+            'post_type'      => Controller\Families::$post_type,
             'posts_per_page' => 1,
             'post_status'    => 'publish',
             'p'              => $post_id
