@@ -1,7 +1,7 @@
 <?php
 
 namespace Mercado_Solidario\REST;
-use Mercado_Solidario\Controller;
+use ReflectionClass;
 use WP_Error;
 
 // don't call the file directly
@@ -18,11 +18,21 @@ class Router{
     }
 
     public function __construct(){
-        new Controller\Stock();
-        new Controller\Families();
-        new Controller\Checkin();
-        new Controller\Checkout();
-        new Controller\Supplier();
+
+        $dir = MERCADO_SOLIDARIO_DIR . 'class/Controller';
+        $namespace = 'Mercado_Solidario\\Controller\\';
+
+        foreach (scandir($dir) as $file) {
+            if (substr($file, -4) === '.php') {
+                $class = $namespace . pathinfo($file, PATHINFO_FILENAME);
+                if (class_exists($class)) {
+                    $reflection = new ReflectionClass($class);
+                    if ($reflection->isInstantiable()) {
+                        $reflection->newInstance();
+                    };
+                };
+            };
+        };
     }
 
 };

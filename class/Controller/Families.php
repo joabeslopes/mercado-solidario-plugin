@@ -2,11 +2,12 @@
 
 namespace Mercado_Solidario\Controller;
 use Mercado_Solidario\Model;
+use Mercado_Solidario\Base;
 
 // don't call the file directly
 defined( 'ABSPATH' ) || die;
 
-class Families extends Base{
+class Families extends Base\Controller{
 
     public static string $post_type = MERCADO_SOLIDARIO_POST_PREFIX.'family';
 

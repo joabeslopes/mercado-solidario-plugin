@@ -1,11 +1,11 @@
 <?php
 
-namespace Mercado_Solidario\Controller;
+namespace Mercado_Solidario\Base;
 
 // don't call the file directly
 defined( 'ABSPATH' ) || die;
 
-class Base {
+class Controller {
 
     public static string $post_type;
     public string $base_route;

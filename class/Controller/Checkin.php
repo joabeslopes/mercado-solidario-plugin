@@ -3,11 +3,12 @@
 namespace Mercado_Solidario\Controller;
 use Mercado_Solidario\Model;
 use Mercado_Solidario\Pages;
+use Mercado_Solidario\Base;
 
 // don't call the file directly
 defined( 'ABSPATH' ) || die;
 
-class Checkin extends Base{
+class Checkin extends Base\Controller{
 
     public function __construct(){
 
