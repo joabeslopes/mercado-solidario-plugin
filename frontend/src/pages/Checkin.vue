@@ -4,8 +4,11 @@ import showPopup from '../js/myPopup';
 import stockManager from '../js/stockManager';
 import CartList from '../components/CartList.vue';
 import StockList from '../components/StockList.vue';
+import SearchSupplier from '../components/SearchSupplier.vue';
+import supplierManager from '../js/supplierManager';
 
 const stockObj = new stockManager('checkin');
+const supplierObj = new supplierManager();
 
 async function sendCart(){
 
@@ -44,7 +47,11 @@ async function sendCart(){
 
   <StockList class="stock" :stockObj="stockObj" />
 
-  <CartList class="cart" :stockObj="stockObj" @send="sendCart" />
+  <div class="wrapper">
+    <SearchSupplier class="search" :supplierObj="supplierObj" />
+
+    <CartList class="cart" :stockObj="stockObj" @send="sendCart" />
+  </div>
 
 </div>
 
@@ -53,15 +60,21 @@ async function sendCart(){
 <style scoped>
 
 @media (max-width: 768px) {
-  .cart {
+  .search {
     order: 1;
+  }
+  .cart {
+    order: 2;
+  }
+  .stock {
+    order: 3;
   }
 }
 
-@media (max-width: 768px) {
-  .stock {
-    order: 2;
-  }
+.wrapper{
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
 </style>

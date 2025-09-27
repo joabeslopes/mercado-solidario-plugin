@@ -25,28 +25,51 @@ function handleClick(id){
 </script>
 
 <template>
-  <div class="searchBar">
-    <div class="searchInput">
-        <input v-model="userInput" @input="handleInput" />
-        <ul v-if="userInput">
-        <li v-for="(obj, id) in supplierObj.suppliersSearch.value">
-            <span @click="handleClick(id)">{{supplierObj.namesSearch.value[id].name}}</span>
-        </li>
-        </ul>
+  <div class="miniSubPage blackPage borderRound">
+    <div class="searchBar">
+      <div class="searchInput">
+          <input v-model="userInput" @input="handleInput" />
+          <ul v-if="userInput" class="results">
+            <li v-for="(obj, id) in supplierObj.suppliersSearch.value">
+                <span @click="handleClick(id)">{{obj.name}}</span>
+            </li>
+          </ul>
+      </div>
+
+      <p> Selecionar fornecedor </p>
     </div>
   </div>
 </template>
 
 <style scoped>
-.searchBar {
+.miniSubPage {
   display: flex;
-  gap: 10px;
-  width: 70%;
-  align-items: start;
+  flex-flow: column;
+  align-items: center;
+  margin-bottom: 10px;
+  height: auto;
 }
 
-.searchInput {
-  flex: 1;
+.searchBar {
+  display: flex;
+  flex-flow: row;
+  gap: 10%;
+  width: 70%;
+}
+
+.searchBar p{
+  margin: 0;
+}
+
+
+
+.searchInput input {
+  width: 100%;
+}
+
+.results {
+  display: flex;
+  align-items: start;
 }
 
 ul{
@@ -57,7 +80,7 @@ ul{
   overflow: scroll;
 }
 
-.searchBox span{
+.searchInput span{
   cursor: pointer;
   color: #007bff;
   padding: 5px;
