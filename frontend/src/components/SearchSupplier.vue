@@ -29,7 +29,7 @@ function handleClick(id){
     <div class="searchBar">
       <div class="searchInput">
           <input v-model="userInput" @input="handleInput" />
-          <ul v-if="userInput" class="results">
+          <ul v-if="userInput">
             <li v-for="(obj, id) in supplierObj.suppliersSearch.value">
                 <span @click="handleClick(id)">{{obj.name}}</span>
             </li>
@@ -55,11 +55,6 @@ function handleClick(id){
 
 .searchInput input {
   width: 100%;
-}
-
-.results {
-  display: flex;
-  align-items: start;
 }
 
 ul{

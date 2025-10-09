@@ -1,7 +1,8 @@
 <?php
 
 namespace Mercado_Solidario\Model;
-use Mercado_Solidario\REST\Router;
+use Mercado_Solidario\Base;
+use WP_REST_Response;
 use WC_Product_Query;
 use WP_REST_Request;
 use WC_Order;
@@ -9,9 +10,9 @@ use WC_Order;
 // don't call the file directly
 defined( 'ABSPATH' ) || die;
 
-class Checkout {
+class Checkout extends Base\Model {
 
-    public function post( WP_REST_Request $request ) {
+    public function post( WP_REST_Request $request ): WP_REST_Response {
 
         $status = 200;
         $messages = [];
@@ -64,9 +65,9 @@ class Checkout {
 
             $order_id = $order->save();
 
-            return Router::success_response( $order_id );
+            return $this->success_response($order_id);
         } else {
-            return Router::error_response('mercado_solidario_error_checkout', $messages);
+            return $this->error_response($messages);
         };
     }
 

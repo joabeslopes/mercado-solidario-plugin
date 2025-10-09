@@ -1,16 +1,17 @@
 <?php
 
 namespace Mercado_Solidario\Model;
-use Mercado_Solidario\REST\Router;
+use Mercado_Solidario\Base;
+use WP_REST_Response;
 use WC_Product_Query;
 use WP_REST_Request;
 
 // don't call the file directly
 defined( 'ABSPATH' ) || die;
 
-class Stock {
+class Stock extends Base\Model {
 
-    public function get_all() {
+    public function get( WP_REST_Request $request ): WP_REST_Response {
 
         $args = [
             'limit' => -1,
@@ -43,10 +44,10 @@ class Stock {
                 ];
             };
         } else {
-            return Router::error_response('mercado_solidario_error_stock', 'Não foi possível encontrar o estoque');
+            return $this->error_response('Não foi possível encontrar o estoque');
         };
 
-        return Router::success_response($stock);
+        return $this->success_response($stock);
     }
 
 }

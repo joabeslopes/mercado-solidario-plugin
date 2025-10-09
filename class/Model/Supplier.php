@@ -1,16 +1,17 @@
 <?php
 
 namespace Mercado_Solidario\Model;
-use WP_Post;
 use Mercado_Solidario\Controller;
-use Mercado_Solidario\REST\Router;
+use Mercado_Solidario\Base;
+use WP_REST_Response;
+use WP_Post;
 use WP_REST_Request;
 use WP_Query;
 
 // don't call the file directly
 defined( 'ABSPATH' ) || die;
 
-class Supplier {
+class Supplier extends Base\Model {
 
     public int $id;
     public string $name;
@@ -90,7 +91,7 @@ class Supplier {
         return $this->search_supplier($query);
     }
 
-    public function get_all() {
+    public function get( WP_REST_Request $request ): WP_REST_Response {
 
         $query = new WP_Query([
             'post_type'      => Controller\Supplier::$post_type,
@@ -103,17 +104,17 @@ class Supplier {
         if (!empty($all_suppliers)) {
             $suppliers = array_column($all_suppliers, null, 'id');
 
-            return Router::success_response($suppliers);
+            return $this->success_response($suppliers);
         } else {
-            return Router::error_response('error', 'Nenhum fornecedor encontrado');
+            return $this->error_response('Nenhum fornecedor encontrado');
         };
     }
 
-    public function post( WP_REST_Request $request ){
+    public function post( WP_REST_Request $request ): WP_REST_Response {
         $new_supplier = $request['supplier'];
 
         if(!$new_supplier){
-            return Router::error_response('erro', 'Nenhum fornecedor enviado');
+            return $this->error_response('Nenhum fornecedor enviado');
         };
 
         $supplier = new Supplier(
@@ -122,29 +123,29 @@ class Supplier {
 
         $search = $this->search_by_name( $supplier->name );
         if (!empty($search)){
-            return Router::error_response('erro', 'Fornecedor já cadastrado');
+            return $this->error_response('Fornecedor já cadastrado');
         };
 
         if ( $supplier->save() ){
-            return Router::success_response($supplier);
+            return $this->success_response($supplier);
         } else {
-            return Router::error_response('erro', 'Não foi possível salvar');
+            return $this->error_response('Não foi possível salvar');
         };
     }
 
-    public function delete( WP_REST_Request $request ) {
+    public function delete( WP_REST_Request $request ): WP_REST_Response {
         $supplier_id = $request['id'];
 
         if(!$supplier_id){
-            return Router::error_response('erro', 'Nenhum fornecedor informado');
+            return $this->error_response('Nenhum fornecedor informado');
         };
 
         $response = wp_delete_post( $supplier_id, true );
 
         if ($response){
-            return Router::success_response();
+            return $this->success_response();
         } else {
-            return Router::error_response('erro', 'Não foi possível deletar');
+            return $this->error_response('Não foi possível deletar');
         }
 
     }

@@ -1,8 +1,9 @@
 <?php
 
 namespace Mercado_Solidario\Model;
-use Mercado_Solidario\REST\Router;
+use WP_REST_Response;
 use Mercado_Solidario\Controller;
+use Mercado_Solidario\Base;
 use WC_Product;
 use WP_Post;
 use WC_Product_Query;
@@ -11,7 +12,7 @@ use WP_REST_Request;
 // don't call the file directly
 defined( 'ABSPATH' ) || die;
 
-class Checkin {
+class Checkin extends Base\Model {
 
     public string $created_by;
     public int $supplier_id;
@@ -108,7 +109,7 @@ class Checkin {
         return $selected_checkin;
     }
 
-    public function post( WP_REST_Request $request ) {
+    public function post( WP_REST_Request $request ): WP_REST_Response {
 
         $status = 200;
         $user = wp_get_current_user();
@@ -143,7 +144,7 @@ class Checkin {
         };
 
         if ($status != 200) {
-            return Router::error_response('mercado_solidario_checkin', 'Não foi possível atualizar o estoque');
+            return $this->error_response('Não foi possível atualizar o estoque');
         } else {
             $this->set_created_by($user->user_login);
             $this->set_created_at($created_at);
@@ -151,9 +152,9 @@ class Checkin {
             $this->set_supplier_id($supplier_id);
             $new_post = $this->save();
             if ($new_post > 0){
-                return Router::success_response( $new_post );
+                return $this->success_response($new_post);
             } else {
-                return Router::error_response('mercado_solidario_checkin', 'Não foi possível atualizar o estoque');
+                return $this->error_response('Não foi possível atualizar o estoque');
             };
         };
 

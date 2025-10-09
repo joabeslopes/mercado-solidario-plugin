@@ -26,7 +26,7 @@ class Controller {
             $this->base_route,
             [
             'methods' => 'GET',
-            'callback' => [ $this->model, 'get_all' ],
+            'callback' => [ $this->model, 'get' ],
             'permission_callback' => [ $this, 'get_permission' ],
             ]
         );

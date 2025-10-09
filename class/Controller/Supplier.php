@@ -3,6 +3,7 @@
 namespace Mercado_Solidario\Controller;
 use Mercado_Solidario\Model;
 use Mercado_Solidario\Base;
+use Mercado_Solidario\Pages;
 
 // don't call the file directly
 defined( 'ABSPATH' ) || die;
@@ -24,7 +25,13 @@ class Supplier extends Base\Controller{
 
     public function load_post_type(){
         register_post_type(self::$post_type, [
-            'public' => false
+            'public' => false,
+            'show_ui' => true,
+            'supports' => ['title', 'custom-fields'],
+            'show_in_menu' => Pages\Main_Page::$menu_slug,
+            'labels' => [
+                'name' => 'Fornecedores'
+            ]
         ]);
     }
 

@@ -1,8 +1,9 @@
 <?php
 
 namespace Mercado_Solidario\Model;
-use Mercado_Solidario\REST\Router;
 use Mercado_Solidario\Controller;
+use Mercado_Solidario\Base;
+use WP_REST_Response;
 use WP_Error;
 use WP_REST_Request;
 use WP_Query;
@@ -11,7 +12,7 @@ use WP_Post;
 // don't call the file directly
 defined( 'ABSPATH' ) || die;
 
-class Families {
+class Families extends Base\Model {
 
     private function search_family(WP_Query $query): ?array {
 
@@ -29,7 +30,7 @@ class Families {
         };
     }
 
-    public function get_all() {
+    public function get( WP_REST_Request $request ): WP_REST_Response {
 
         $today = current_time('Y-m-d');
 
@@ -49,17 +50,17 @@ class Families {
         $families = $this->search_family($query);
 
         if ($families) {
-            return Router::success_response($families);
+            return $this->success_response($families);
         } else {
-            return Router::error_response('error', 'Nenhuma familia encontrada');
+            return $this->error_response('Nenhuma familia encontrada');
         };
     }
 
-    public function post( WP_REST_Request $request ){
+    public function post( WP_REST_Request $request ): WP_REST_Response {
         $new_family = $request['newFamily'];
 
         if(!$new_family){
-            return Router::error_response('erro', 'Faltou enviar a nova familia');
+            return $this->error_response('Faltou enviar a nova familia');
         };
 
         $family = new Family(
@@ -73,34 +74,34 @@ class Families {
 
         $search = $this->search_by_cpf( $family->cpf );
         if (is_array($search)){
-            return Router::error_response('erro', 'Família já cadastrada');
+            return $this->error_response('Família já cadastrada');
         };
 
         $search = $this->search_by_phone( $family->phone );
         if (is_array($search)){
-            return Router::error_response('erro', 'Família já cadastrada');
+            return $this->error_response('Família já cadastrada');
         };
 
         if ( $family->save() ){
-            return Router::success_response($family);
+            return $this->success_response($family);
         } else {
-            return Router::error_response('erro', 'Não foi possível salvar');
+            return $this->error_response('Não foi possível salvar');
         };
     }
 
-    public function delete( WP_REST_Request $request ) {
+    public function delete( WP_REST_Request $request ): WP_REST_Response {
         $family_id = $request['id'];
 
         if(!$family_id){
-            return Router::error_response('erro', 'Faltou informar a família');
+            return $this->error_response('Faltou informar a família');
         };
 
         $response = wp_delete_post( $family_id, true );
 
         if ($response){
-            return Router::success_response();
+            return $this->success_response();
         } else {
-            return Router::error_response('erro', 'Não foi possível deletar');
+            return $this->error_response('Não foi possível deletar');
         }
 
     }
@@ -122,9 +123,9 @@ class Families {
         $families = $this->search_family($query);
 
         if ($families) {
-            return Router::success_response($families);
+            return $this->success_response($families);
         } else {
-            return Router::error_response('error', 'Nenhuma familia encontrada');
+            return $this->error_response('Nenhuma familia encontrada');
         };
 
     }
@@ -146,9 +147,9 @@ class Families {
         $families = $this->search_family($query);
 
         if ($families) {
-            return Router::success_response($families);
+            return $this->success_response($families);
         } else {
-            return Router::error_response('error', 'Nenhuma familia encontrada');
+            return $this->error_response('Nenhuma familia encontrada');
         };
     }
 
@@ -164,9 +165,9 @@ class Families {
         $families = $this->search_family($query);
 
         if ($families) {
-            return Router::success_response($families);
+            return $this->success_response($families);
         } else {
-            return Router::error_response('error', 'Nenhuma familia encontrada');
+            return $this->error_response('Nenhuma familia encontrada');
         };
     }
 
