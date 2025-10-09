@@ -32,8 +32,6 @@ class Checkin_Post {
         <p>
             <label><strong>Criado por:</strong></label><br>
             <label><?php echo $checkin->created_by ?></label><br>
-            <label><strong>Criado em:</strong></label><br>
-            <label><?php echo $checkin->created_at ?></label><br>
             <label><strong>Fornecedor:</strong></label><br>
             <label><?php echo $supplier->name ?></label><br>
             <label><strong>Observações:</strong></label><br>
@@ -43,17 +41,14 @@ class Checkin_Post {
         <?php
             foreach($checkin->notes as $note){
                 $name         = $note->name;
-                $old_quantity = $note->old_quantity;
-                $new_quantity = $note->new_quantity;
+                $quantity = $note->quantity;
                 ?>
                 <li class="card">
                     <p>
                         <label><strong>Produto:</strong></label><br>
                         <label><?php echo $name ?></label><br>
-                        <label><strong>Quantidade antiga:</strong></label><br>
-                        <label><?php echo $old_quantity ?></label><br>
-                        <label><strong>Nova quantidade:</strong></label><br>
-                        <label><?php echo $new_quantity ?></label><br>
+                        <label><strong>Quantidade:</strong></label><br>
+                        <label><?php echo $quantity ?></label><br>
                     </p>
                 </li>
                 <?php

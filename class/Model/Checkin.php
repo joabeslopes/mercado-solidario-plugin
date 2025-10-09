@@ -18,7 +18,6 @@ class Checkin extends Base\Model {
     public int $supplier_id;
     public string $created_at;
     public string $obs;
-    public array $cart;
     private array $products;
     public array $notes;
 
@@ -46,12 +45,7 @@ class Checkin extends Base\Model {
         $name = $product->get_name();
 
         $this->notes[] = [
-            'name' => $name,
-            'old_quantity' => $product->get_stock_quantity(),
-            'new_quantity' => $new_quantity
-        ];
-
-        $this->cart[$sku] = [
+            'sku' => $sku,
             'name' => $name,
             'quantity' => $quantity
         ];
@@ -75,13 +69,12 @@ class Checkin extends Base\Model {
         wp_update_post([
             'ID' => $post_id,
             'post_title' => $post_id,
+            'post_date' => $this->created_at
         ]);
 
         update_post_meta($post_id, 'created_by', $this->created_by);
-        update_post_meta($post_id, 'created_at', $this->created_at);
         update_post_meta($post_id, 'obs', $this->obs);
         update_post_meta($post_id, 'supplier_id', $this->supplier_id);
-        update_post_meta($post_id, 'cart', json_encode($this->cart, JSON_UNESCAPED_UNICODE) );
         update_post_meta($post_id, 'notes', json_encode($this->notes, JSON_UNESCAPED_UNICODE) );
 
         foreach ($this->products as $prod) { 
@@ -98,11 +91,7 @@ class Checkin extends Base\Model {
         $notes_json = get_post_meta($post->ID, 'notes', true);
         $selected_checkin->notes = json_decode($notes_json);
 
-        $cart_json = get_post_meta($post->ID, 'cart', true);
-        $selected_checkin->cart = json_decode($cart_json, true);
-
         $selected_checkin->created_by = get_post_meta($post->ID, 'created_by', true);
-        $selected_checkin->created_at = get_post_meta($post->ID, 'created_at', true);
         $selected_checkin->obs = get_post_meta($post->ID, 'obs', true);
         $selected_checkin->supplier_id = (int) get_post_meta($post->ID, 'supplier_id', true);
 
