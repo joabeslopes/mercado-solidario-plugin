@@ -19,11 +19,16 @@ class Checkout extends Base\Model {
 
         $order = new WC_Order();
         $user = wp_get_current_user();
-
         $cart = $request['cart'];
 
-        if (!$cart) {
+        if (!$user || $user->ID === 0) {
             $status = 400;
+            $messages[] = 'Usuario não logado';
+        };
+
+        if (!$cart || empty($cart)) {
+            $status = 400;
+            $messages[] = 'Carrinho vazio';
         } else {
             foreach ($cart as $cartProd) {
 
