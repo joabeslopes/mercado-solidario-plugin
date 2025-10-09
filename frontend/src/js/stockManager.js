@@ -153,9 +153,17 @@ export default class stockManager {
       return null;
     };
 
-    const newQuantity = value.replace(/[^0-9]/g,'');
-
-    prod.quantity = newQuantity == '' ? '' : Number(newQuantity);
+    switch (typeof value){
+      case "string":
+        const newQuantity = value.replace(/[^0-9]/g,'');
+        prod.quantity = newQuantity == '' ? '' : Number(newQuantity);
+        break;
+      case "number":
+        prod.quantity = value;
+        break;
+      default:
+        return null;
+    };
 
     this.updateCartTotal();
   };
