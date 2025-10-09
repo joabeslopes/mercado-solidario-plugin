@@ -34,8 +34,7 @@ nav{
 <style>
 .divPage{
   display: flex;
-  justify-content: space-between;
-  gap: 5%;
+  gap: 90px;
 }
 
 @media (max-width: 768px) {
