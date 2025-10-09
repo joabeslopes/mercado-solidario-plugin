@@ -38,6 +38,12 @@ class Supplier {
         return new Supplier($id, $name);
     }
 
+    public static function build_from_id(int $id): Supplier {
+        $post = get_post($id);
+
+        return self::build_from_post($post);
+    }
+
     public function save(): bool {
         if ( $this->name == '' ){
             return false;
@@ -58,38 +64,30 @@ class Supplier {
         return true;
     }
 
-    private function search_supplier(WP_Query $query): ?array {
+    private function search_supplier(WP_Query $query): array {
+
+        $result = [];
 
         if ($query->have_posts()) {
-            $result = [];
             $posts = $query->get_posts();
             foreach ($posts as $post) {
                 $result[] = (array) self::build_from_post($post);
             };
-
-            return $result;
-
-        } else {
-            return null;
         };
+        return $result;
     }
 
-    public function search_by_name(string $name) {
+    public function search_by_name(string $name): array {
+        $safe_name = sanitize_text_field($name);
+
         $query = new WP_Query([
             'post_type'      => Controller\Supplier::$post_type,
             'posts_per_page' => 1,
             'post_status'    => 'publish',
-            's'              => $name
+            's'              => $safe_name
         ]);
 
-        $suppliers = $this->search_supplier($query);
-
-        if ($suppliers) {
-            return Router::success_response($suppliers);
-        } else {
-            return Router::error_response('error', 'Nenhum fornecedor encontrado');
-        };
-
+        return $this->search_supplier($query);
     }
 
     public function get_all() {
@@ -102,7 +100,7 @@ class Supplier {
 
         $all_suppliers = $this->search_supplier($query);
 
-        if ($all_suppliers) {
+        if (!empty($all_suppliers)) {
             $suppliers = array_column($all_suppliers, null, 'id');
 
             return Router::success_response($suppliers);
@@ -123,7 +121,7 @@ class Supplier {
         );
 
         $search = $this->search_by_name( $supplier->name );
-        if (is_array($search)){
+        if (!empty($search)){
             return Router::error_response('erro', 'Fornecedor já cadastrado');
         };
 

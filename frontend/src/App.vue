@@ -26,6 +26,24 @@ nav{
   justify-content: center;
 }
 
+.router-link-exact-active {
+  color: #c61c8bd4;
+}
+</style>
+
+<style>
+.divPage{
+  display: flex;
+  justify-content: space-between;
+  gap: 5%;
+}
+
+@media (max-width: 768px) {
+  .divPage{
+    flex-direction: column;
+  }
+}
+
 a{
   color: yellow;
   padding: 10px;
@@ -36,17 +54,23 @@ a:focus{
   box-shadow: none;
 }
 
-.router-link-exact-active {
-  color: #c61c8bd4;
+.submitButton {
+  border: none;
+  outline: none;
+  background-color: #007bff;
+  color: white;
+  padding: 5px 10px;
+  height: auto;
+  font-weight: bold;
+  margin-top: 5px;
 }
-</style>
 
+.submitButton:hover {
+  cursor: pointer;
+}
 
-<style>
-.divPage{
-  display: flex;
-  justify-content: space-between;
-  gap: 5%;
+.submitButton:active {
+  background-color: #0f4e92;
 }
 
 .divSubpage{
@@ -54,6 +78,14 @@ a:focus{
   flex: 1;
   flex-flow: column;
   align-items: center;
+}
+
+.miniSubPage {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  margin-bottom: 10px;
+  height: auto;
 }
 
 .blackPage{
@@ -64,12 +96,6 @@ a:focus{
 
 .blackPage > h1 {
   color: white;
-}
-
-@media (max-width: 768px) {
-  .divPage{
-    flex-direction: column;
-  }
 }
 
 .borderRound {

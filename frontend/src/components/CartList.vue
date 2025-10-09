@@ -17,7 +17,7 @@ const props = defineProps({
     
     <p>Total: ${{ stockObj.cart.value.total }}</p>
 
-    <button @click="$emit('send')">Enviar</button>
+    <button class="submitButton borderRound" @click="$emit('send')">Enviar</button>
 
     <table>
         <thead>
@@ -26,7 +26,7 @@ const props = defineProps({
             <th class="quantidade">Qtd.</th>
             <th class="add"></th>
             <th class="sub"></th>
-            <th class="del"><button @click="stockObj.clearCart()">Limpar carrinho</button></th>
+            <th class="del"><button class="submitButton borderRound" @click="stockObj.clearCart()">Limpar carrinho</button></th>
         </thead>
         <tbody>
             <tr v-for="sku in stockObj.cart.value.skuList">

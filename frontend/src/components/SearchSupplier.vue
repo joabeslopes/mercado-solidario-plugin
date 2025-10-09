@@ -35,21 +35,13 @@ function handleClick(id){
             </li>
           </ul>
       </div>
-
       <p> Selecionar fornecedor </p>
     </div>
+    <a>{{supplierObj.supplier.value.name}}</a>
   </div>
 </template>
 
 <style scoped>
-.miniSubPage {
-  display: flex;
-  flex-flow: column;
-  align-items: center;
-  margin-bottom: 10px;
-  height: auto;
-}
-
 .searchBar {
   display: flex;
   flex-flow: row;
@@ -60,8 +52,6 @@ function handleClick(id){
 .searchBar p{
   margin: 0;
 }
-
-
 
 .searchInput input {
   width: 100%;

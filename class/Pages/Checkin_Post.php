@@ -25,14 +25,19 @@ class Checkin_Post {
     }
 
     public function render_metabox(WP_Post $post) {
-        $checkin = Model\Checkin::build_from_post($post)
+        $checkin = Model\Checkin::build_from_post($post);
+        $supplier = Model\Supplier::build_from_id($checkin->supplier_id);
 
         ?>
         <p>
             <label><strong>Criado por:</strong></label><br>
-            <label><?php echo esc_attr($checkin->created_by);?></label><br>
+            <label><?php echo $checkin->created_by ?></label><br>
+            <label><strong>Criado em:</strong></label><br>
+            <label><?php echo $checkin->created_at ?></label><br>
             <label><strong>Fornecedor:</strong></label><br>
-            <label><?php echo esc_attr($checkin->supplier);?></label><br>
+            <label><?php echo $supplier->name ?></label><br>
+            <label><strong>Observações:</strong></label><br>
+            <label><?php echo $checkin->obs ?></label><br>
         </p>
         <ul>
         <?php
@@ -44,11 +49,11 @@ class Checkin_Post {
                 <li class="card">
                     <p>
                         <label><strong>Produto:</strong></label><br>
-                        <label><?php echo esc_attr($name);?></label><br>
+                        <label><?php echo $name ?></label><br>
                         <label><strong>Quantidade antiga:</strong></label><br>
-                        <label><?php echo esc_attr($old_quantity); ?></label><br>
+                        <label><?php echo $old_quantity ?></label><br>
                         <label><strong>Nova quantidade:</strong></label><br>
-                        <label><?php echo esc_attr($new_quantity);?></label><br>
+                        <label><?php echo $new_quantity ?></label><br>
                     </p>
                 </li>
                 <?php

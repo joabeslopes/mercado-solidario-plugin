@@ -118,7 +118,7 @@ getFamilies();
         <p>Observações</p>
         <textarea v-model="newFamily.notes" />
         <p></p>
-        <button @click="sendFamily()">Criar</button>
+        <button class="submitButton borderRound" @click="sendFamily()">Criar</button>
       </div>
 
     </div>
@@ -142,7 +142,7 @@ getFamilies();
         <p>
           Observações: {{ family.notes }}
         </p>
-        <button @click="deleteFamily(family.id)">Deletar</button>
+        <button class="submitButton borderRound" @click="deleteFamily(family.id)">Deletar</button>
       </div>
 
     </div>

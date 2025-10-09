@@ -19,13 +19,13 @@ function quantityInput(evt){
     <td>R$ {{ product.price }}</td>
     <td><input v-model="product.quantity" @input="quantityInput" /> </td>
     <td>
-        <button @click="stockObj.addProd(sku)">+</button>
+        <button class="submitButton borderRound medium" @click="stockObj.addProd(sku)">+</button>
     </td>
     <td>
-        <button @click="stockObj.subProd(sku)">-</button>
+        <button class="submitButton borderRound medium" @click="stockObj.subProd(sku)">-</button>
     </td>
     <td class="del">
-        <button @click="stockObj.delProd(sku)">Delete</button>  
+        <button class="submitButton borderRound" @click="stockObj.delProd(sku)">Delete</button>  
     </td>
 
 </template>
@@ -37,5 +37,9 @@ input{
 
 .del > button{
     width: 100%;
+}
+
+.medium{
+    font-size: medium;
 }
 </style>

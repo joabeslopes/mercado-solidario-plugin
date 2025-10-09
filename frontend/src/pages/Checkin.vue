@@ -6,9 +6,18 @@ import CartList from '../components/CartList.vue';
 import StockList from '../components/StockList.vue';
 import SearchSupplier from '../components/SearchSupplier.vue';
 import supplierManager from '../js/supplierManager';
+import { ref } from 'vue';
 
 const stockObj = new stockManager('checkin');
 const supplierObj = new supplierManager();
+
+const now = new Date();
+const tzOffset = now.getTimezoneOffset() * 60000;
+const localTime = new Date(now - tzOffset);
+const localISOTime = localTime.toISOString().slice(0, 16);
+
+const created_at = ref(localISOTime);
+const obs = ref("");
 
 async function sendCart(){
 
@@ -18,8 +27,13 @@ async function sendCart(){
     return null;
   };
 
+  const supplier = supplierObj.getSupplier();
+
   const request = {
-    'cart': userCart
+    'cart': userCart,
+    'supplier_id': supplier.id,
+    'created_at': created_at.value,
+    'obs': obs.value
   };
 
   const response = await post( '/checkin', request );
@@ -48,7 +62,15 @@ async function sendCart(){
   <StockList class="stock" :stockObj="stockObj" />
 
   <div class="wrapper">
+
     <SearchSupplier class="search" :supplierObj="supplierObj" />
+
+    <div class="dados miniSubPage blackPage borderRound">
+      <p>Data de criação</p>
+      <input v-model="created_at" type="datetime-local" />
+      <p>Observações</p>
+      <textarea v-model="obs" />
+    </div>
 
     <CartList class="cart" :stockObj="stockObj" @send="sendCart" />
   </div>
@@ -63,12 +85,20 @@ async function sendCart(){
   .search {
     order: 1;
   }
-  .cart {
+  .dados {
     order: 2;
   }
-  .stock {
+  .cart {
     order: 3;
   }
+  .stock {
+    order: 4;
+  }
+}
+
+.dados > textarea{
+  width: 70%;
+  height: 60px;
 }
 
 .wrapper{

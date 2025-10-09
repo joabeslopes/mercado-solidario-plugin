@@ -3,7 +3,7 @@ import { get } from './myApiClient';
 
 export default class supplierManager {
 
-  suppliers = ref({});
+  supplier = ref({});
   allSuppliers = ref({});
   suppliersSearch = ref({});
 
@@ -39,12 +39,12 @@ export default class supplierManager {
     const savedSuppliers = localStorage.getItem(this.suppliersStorage);
 
     if (savedSuppliers != null) {
-      this.suppliers.value = JSON.parse(savedSuppliers);
+      this.supplier.value = JSON.parse(savedSuppliers);
     };
   };
 
   save(){
-    localStorage.setItem(this.suppliersStorage, JSON.stringify(this.suppliers.value));
+    localStorage.setItem(this.suppliersStorage, JSON.stringify(this.supplier.value));
   };
 
   createSupplier(supplier){
@@ -64,7 +64,7 @@ export default class supplierManager {
       return null;
     };
 
-    this.suppliers.value[id] = supplierSearch;
+    this.supplier.value = supplierSearch;
     this.save();
 
   };
@@ -76,8 +76,12 @@ export default class supplierManager {
       return null;
     };
 
-    delete this.suppliers.value[id];
+    this.supplier.value = {};
     this.save();
+  };
+
+  getSupplier(){
+    return this.supplier.value;
   };
 
   searchName(name){

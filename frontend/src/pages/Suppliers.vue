@@ -64,7 +64,7 @@ async function deleteSupplier(id){
         <p>Nome</p>
         <input v-model="newSupplier.name" />
         <p></p>
-        <button @click="sendSupplier()">Criar</button>
+        <button class="submitButton borderRound" @click="sendSupplier()">Criar</button>
       </div>
 
     </div>
@@ -76,7 +76,7 @@ async function deleteSupplier(id){
         <p>
           Nome: {{ supplier.name }}
         </p>
-        <button @click="deleteSupplier(supplier.id)">Deletar</button>
+        <button class="submitButton borderRound" @click="deleteSupplier(supplier.id)">Deletar</button>
       </div>
 
     </div>
