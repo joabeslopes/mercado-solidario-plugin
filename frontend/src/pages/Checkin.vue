@@ -22,12 +22,16 @@ const obs = ref("");
 async function sendCart(){
 
   const userCart = stockObj.getCart();
-
   if (userCart == null){
+    showPopup("Erro", "Carrinho vazio");
     return null;
   };
 
   const supplier = supplierObj.getSupplier();
+  if (supplier == null){
+    showPopup("Erro", "Sem fornecedor");
+    return null;
+  };
 
   const request = {
     'cart': userCart,

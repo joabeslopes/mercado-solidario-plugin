@@ -81,7 +81,11 @@ export default class supplierManager {
   };
 
   getSupplier(){
-    return this.supplier.value;
+    if (Object.keys(this.supplier.value).length === 0){
+      return null;
+    } else {
+      return this.supplier.value;
+    };
   };
 
   searchName(name){

@@ -132,6 +132,10 @@ class Checkin extends Base\Model {
             };
         };
 
+        if(!$supplier_id && $supplier_id == 0) {
+            $status = 400;
+        };
+
         if ($status != 200) {
             return $this->error_response('Não foi possível atualizar o estoque');
         } else {

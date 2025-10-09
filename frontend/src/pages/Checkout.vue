@@ -12,6 +12,7 @@ async function sendCart(){
   const userCart = stockObj.getCart();
 
   if (userCart == null){
+    showPopup("Erro", "Carrinho vazio");
     return null;
   };
 
