@@ -37,7 +37,8 @@ class Checkout extends Base\Model {
 
                 $args = [
                     'sku' => $prodSku,
-                    'limit' => 1
+                    'limit' => 1,
+                    'type' => ['simple', 'variation']
                 ];
                 $query = new WC_Product_Query($args);
 
