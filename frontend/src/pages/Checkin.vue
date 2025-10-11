@@ -1,12 +1,13 @@
 <script setup>
 import { post } from '../js/myApiClient';
+import { ref } from 'vue';
 import showPopup from '../js/myPopup';
+import supplierManager from '../js/supplierManager';
 import stockManager from '../js/stockManager';
 import CartList from '../components/CartList.vue';
 import StockList from '../components/StockList.vue';
 import SearchSupplier from '../components/SearchSupplier.vue';
-import supplierManager from '../js/supplierManager';
-import { ref } from 'vue';
+import Loading from '../components/Loading.vue';
 
 const stockObj = new stockManager('checkin');
 const supplierObj = new supplierManager();
@@ -19,17 +20,23 @@ const localISOTime = localTime.toISOString().slice(0, 16);
 const created_at = ref(localISOTime);
 const obs = ref("");
 
+const loading = ref(false);
+
 async function sendCart(){
+
+  loading.value = true;
 
   const userCart = stockObj.getCart();
   if (userCart == null){
     showPopup("Erro", "Carrinho vazio");
+    loading.value = false;
     return null;
   };
 
   const supplier = supplierObj.getSupplier();
   if (supplier == null){
     showPopup("Erro", "Sem fornecedor");
+    loading.value = false;
     return null;
   };
 
@@ -43,16 +50,13 @@ async function sendCart(){
   const response = await post( '/checkin', request );
 
   if (response.status == 200) {
-
     showPopup("Sucesso", "Estoque abastecido");
-
     stockObj.clearCart();
-
   } else {
-
     showPopup("Erro", response.message);
-
   };
+
+  loading.value = false;
 
 };
 
@@ -61,25 +65,26 @@ async function sendCart(){
 
 <template>
 
-<div class="divPage">
-
-  <StockList class="stock" :stockObj="stockObj" />
-
-  <div class="wrapper">
-
-    <SearchSupplier class="search" :supplierObj="supplierObj" />
-
-    <div class="dados miniSubPage blackPage borderRound">
-      <p>Data de criação</p>
-      <input v-model="created_at" type="datetime-local" />
-      <p>Observações</p>
-      <textarea v-model="obs" />
-    </div>
-
-    <CartList class="cart" :stockObj="stockObj" @send="sendCart" />
+  <div v-if="loading" class="blackPage borderRound divSubpage">
+    <Loading />
   </div>
 
-</div>
+  <div v-else class="divPage">
+    <StockList class="stock" :stockObj="stockObj" />
+
+    <div class="wrapper">
+      <SearchSupplier class="search" :supplierObj="supplierObj" />
+
+      <div class="dados miniSubPage blackPage borderRound">
+        <p>Data de criação</p>
+        <input v-model="created_at" type="datetime-local" />
+        <p>Observações</p>
+        <textarea v-model="obs" />
+      </div>
+
+      <CartList class="cart" :stockObj="stockObj" @send="sendCart" />
+    </div>
+  </div>
 
 </template>
 
