@@ -3,7 +3,6 @@
 namespace Mercado_Solidario\Model;
 use Mercado_Solidario\Base;
 use WP_REST_Response;
-use WC_Product_Query;
 use WP_REST_Request;
 use WC_Order;
 
@@ -34,18 +33,10 @@ class Checkout extends Base\Model {
 
                 $prodSku = sanitize_text_field($cartProd['sku']);
                 $prodQuantity = (int) sanitize_text_field($cartProd['quantity']);
+                $prodID = wc_get_product_id_by_sku($prodSku);
 
-                $args = [
-                    'sku' => $prodSku,
-                    'limit' => 1,
-                    'type' => ['simple', 'variation']
-                ];
-                $query = new WC_Product_Query($args);
-
-                $result = $query->get_products();
-
-                if ($result){
-                    $product = $result[0];
+                if ($prodID){
+                    $product = wc_get_product($prodID);
 
                     $quantity = $product->get_stock_quantity() - $prodQuantity;
 

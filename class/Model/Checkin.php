@@ -114,18 +114,10 @@ class Checkin extends Base\Model {
 
                 $prodSku = sanitize_text_field($cartProd['sku']);
                 $prodQuantity = (int) sanitize_text_field($cartProd['quantity']);
+                $prodID = wc_get_product_id_by_sku($prodSku);
 
-                $args = [
-                    'sku' => $prodSku,
-                    'limit' => 1,
-                    'type' => ['simple', 'variation']
-                ];
-                $query = new WC_Product_Query($args);
-
-                $result = $query->get_products();
-
-                if ($result){
-                    $product = $result[0];
+                if ($prodID){
+                    $product = wc_get_product($prodID);
                     $this->add_product($product, $prodQuantity);
                 } else {
                     $status = 400;
