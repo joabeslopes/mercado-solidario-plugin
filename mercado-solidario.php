@@ -6,10 +6,10 @@ Text Domain: mercado-solidario
 Requires Plugins: woocommerce
 Description: Mercado solidario
 Author: Joabe Lopes
-Version: 1.0
+Version: 1.3
 Author URI: https://sitejoabe.mooo.com
 Requires at least:    6.0
-Tested up to:         6.7
+Tested up to:         6.8
 Requires PHP:         8.0
 License: GPL2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -27,6 +27,14 @@ define('MERCADO_SOLIDARIO_REST_NAMESPACE', 'mercado-solidario/v1' );
 define('MERCADO_SOLIDARIO_POST_PREFIX', 'ms_');
 define('MERCADO_SOLIDARIO_CAPABILITY', 'manage_woocommerce');
 
-new Mercado_Solidario\Pages\Main_Page();
+use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
 
-new Mercado_Solidario\REST\Router();
+$updater = PucFactory::buildUpdateChecker(
+	'https://github.com/joabeslopes/mercado-solidario-plugin/',
+	__FILE__,
+	'mercado-solidario'
+);
+
+$main_page = new Mercado_Solidario\Pages\Main_Page();
+
+$router = new Mercado_Solidario\REST\Router();
