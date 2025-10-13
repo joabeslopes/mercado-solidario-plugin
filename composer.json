@@ -3,5 +3,8 @@
         "psr-4": {
             "Mercado_Solidario\\":"class"
         }
+    },
+    "require": {
+        "yahnis-elsts/plugin-update-checker": "^5.6"
     }
 }
