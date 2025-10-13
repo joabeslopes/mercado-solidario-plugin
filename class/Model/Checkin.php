@@ -6,7 +6,6 @@ use Mercado_Solidario\Controller;
 use Mercado_Solidario\Base;
 use WC_Product;
 use WP_Post;
-use WC_Product_Query;
 use WP_REST_Request;
 
 // don't call the file directly

@@ -4,10 +4,8 @@ namespace Mercado_Solidario\Model;
 use Mercado_Solidario\Controller;
 use Mercado_Solidario\Base;
 use WP_REST_Response;
-use WP_Error;
 use WP_REST_Request;
 use WP_Query;
-use WP_Post;
 
 // don't call the file directly
 defined( 'ABSPATH' ) || die;

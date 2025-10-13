@@ -6,7 +6,7 @@ Text Domain: mercado-solidario
 Requires Plugins: woocommerce
 Description: Mercado solidario
 Author: Joabe Lopes
-Version: 1.3
+Version: 1.4
 Author URI: https://sitejoabe.mooo.com
 Requires at least:    6.0
 Tested up to:         6.8
@@ -22,7 +22,6 @@ require_once('vendor/autoload.php' );
 
 define('MERCADO_SOLIDARIO_URL', plugins_url( '/mercado-solidario'));
 define('MERCADO_SOLIDARIO_DIR', plugin_dir_path( __FILE__));
-define('MERCADO_SOLIDARIO_VERSION', '1.0');
 define('MERCADO_SOLIDARIO_REST_NAMESPACE', 'mercado-solidario/v1' );
 define('MERCADO_SOLIDARIO_POST_PREFIX', 'ms_');
 define('MERCADO_SOLIDARIO_CAPABILITY', 'manage_woocommerce');
