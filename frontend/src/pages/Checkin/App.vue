@@ -1,13 +1,14 @@
 <script setup>
-import { post } from '../js/myApiClient';
+import '../../css/global.css';
+import { post } from '../../js/myApiClient';
 import { ref } from 'vue';
-import showPopup from '../js/myPopup';
-import supplierManager from '../js/supplierManager';
-import stockManager from '../js/stockManager';
-import CartList from '../components/CartList.vue';
-import StockList from '../components/StockList.vue';
-import SearchSupplier from '../components/SearchSupplier.vue';
-import Loading from '../components/Loading.vue';
+import showPopup from '../../js/myPopup';
+import supplierManager from '../../js/supplierManager';
+import stockManager from '../../js/stockManager';
+import CartList from '../../components/CartList.vue';
+import StockList from '../../components/StockList.vue';
+import SearchSupplier from '../../components/SearchSupplier.vue';
+import Loading from '../../components/Loading.vue';
 
 const stockObj = new stockManager('checkin');
 const supplierObj = new supplierManager();

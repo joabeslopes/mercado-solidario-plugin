@@ -1,11 +1,12 @@
 <script setup>
-import { post } from '../js/myApiClient';
+import '../../css/global.css';
+import { post } from '../../js/myApiClient';
 import { ref } from 'vue';
-import showPopup from '../js/myPopup';
-import stockManager from '../js/stockManager';
-import CartList from '../components/CartList.vue';
-import StockList from '../components/StockList.vue';
-import Loading from '../components/Loading.vue';
+import showPopup from '../../js/myPopup';
+import stockManager from '../../js/stockManager';
+import CartList from '../../components/CartList.vue';
+import StockList from '../../components/StockList.vue';
+import Loading from '../../components/Loading.vue';
 
 const loading = ref(false);
 

@@ -1,7 +1,8 @@
 <script setup>
+import '../../css/global.css';
 import { ref } from 'vue';
-import { get, post, del } from '../js/myApiClient';
-import showPopup from '../js/myPopup';
+import { get, post, del } from '../../js/myApiClient';
+import showPopup from '../../js/myPopup';
 
 const families = ref([]);
 

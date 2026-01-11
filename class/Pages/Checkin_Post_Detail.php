@@ -7,7 +7,7 @@ use Mercado_Solidario\Model;
 // don't call the file directly
 defined( 'ABSPATH' ) || die;
 
-class Checkin_Post {
+class Checkin_Post_Detail {
     public string $post_type;
 
     public function __construct($post_type){

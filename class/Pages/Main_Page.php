@@ -17,11 +17,6 @@ class Main_Page {
         add_action('admin_menu',[$this,'create_page']);
     }
 
-    public function show_page(){
-        $caixa_page = file_get_contents( MERCADO_SOLIDARIO_DIR.'/frontend/dist/index.html');
-        echo $caixa_page;
-    }
-
     public function create_page() {
 
         $menupage = add_menu_page(
@@ -33,17 +28,12 @@ class Main_Page {
             self::$icon_url
         );
 
-        add_submenu_page(
-            self::$menu_slug,
-            'Geral',
-            'Geral',
-            self::$capability,
-            self::$menu_slug,
-            [$this,'show_page'],
-            0
-        );
+        add_action( "admin_print_scripts", [$this,'print_settings'] );
 
-        add_action( "admin_print_scripts-$menupage", [$this,'print_settings'] );
+        // Submenus
+        new Checkin(0);
+        new Checkout(1);
+        new Families(2);
 
     }
 

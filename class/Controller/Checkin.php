@@ -35,7 +35,7 @@ class Checkin extends Base\Controller{
             ]
         ]);
 
-        new Pages\Checkin_Post(self::$post_type);
+        new Pages\Checkin_Post_Detail(self::$post_type);
     }
 
 };
