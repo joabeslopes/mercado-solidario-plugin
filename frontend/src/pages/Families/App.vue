@@ -46,7 +46,7 @@ async function sendFamily(){
 
   if (response.status == 200){
 
-    families.value.push({...newFamily.value});
+    families.value.push({...response.data});
 
     newFamily.value = {...emptyFamily};
     sessionStorage.setItem('mercado-solidario-families', JSON.stringify(families.value));
