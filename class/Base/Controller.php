@@ -1,6 +1,7 @@
 <?php
 
 namespace Mercado_Solidario\Base;
+use Mercado_Solidario\Security\CapabilitiesManager;
 
 // don't call the file directly
 defined( 'ABSPATH' ) || die;
@@ -12,7 +13,7 @@ class Controller {
     public object $model;
 
     public function get_permission(){
-        return current_user_can( MERCADO_SOLIDARIO_CAPABILITY );
+        return current_user_can( CapabilitiesManager::getFromClass($this) );
     }
 
     public function register(string $method){

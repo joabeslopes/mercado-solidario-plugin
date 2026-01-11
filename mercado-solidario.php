@@ -34,6 +34,8 @@ $updater = PucFactory::buildUpdateChecker(
 	'mercado-solidario'
 );
 
+$capabilities_manager = new Mercado_Solidario\Security\CapabilitiesManager();
+
 $main_page = new Mercado_Solidario\Pages\Main_Page();
 
 $router = new Mercado_Solidario\REST\Router();

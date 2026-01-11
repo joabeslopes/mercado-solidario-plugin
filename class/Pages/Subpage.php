@@ -1,19 +1,22 @@
 <?php
 
 namespace Mercado_Solidario\Pages;
+use Mercado_Solidario\Security\CapabilitiesManager;
 
 // don't call the file directly
 defined( 'ABSPATH' ) || die;
 
 class Subpage {
 
-    public string $page_title = '';
-    public string $menu_title = '';
-    public string $capability = MERCADO_SOLIDARIO_CAPABILITY;
-    public string $menu_slug = '';
+    public string $page_title;
+    public string $menu_title;
+    public string $capability;
+    public string $menu_slug;
 
-    public function __construct(int $position) {
-        $this->create_subpage($position);
+    public function __construct() {
+        $this->capability = CapabilitiesManager::getFromClass($this);
+
+        $this->create_subpage();
     }
 
     public function getShortName(): string {
@@ -25,7 +28,7 @@ class Subpage {
         echo $page_content;
     }
 
-    public function create_subpage(int $position) {
+    public function create_subpage() {
 
         add_submenu_page(
             Main_Page::$menu_slug,
@@ -34,7 +37,7 @@ class Subpage {
             $this->capability,
             $this->menu_slug,
             [$this,'show_page'],
-            $position
+            0
         );
     }
 
