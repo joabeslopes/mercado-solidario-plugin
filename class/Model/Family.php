@@ -76,7 +76,7 @@ class Family {
     }
 
     public function save(): bool {
-        if ( $this->name == '' || $this->cpf == '' || $this->phone == '' ){
+        if ( $this->name == '' || $this->cpf == '' || $this->phone == '' || $this->valid_until == '' ){
             return false;
         };
 

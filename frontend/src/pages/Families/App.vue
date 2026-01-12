@@ -1,152 +1,34 @@
 <script setup>
-import '../../css/global.css';
-import { ref } from 'vue';
-import { get, post, del } from '../../js/myApiClient';
-import showPopup from '../../js/myPopup';
-
-const families = ref([]);
-
-const emptyFamily = {
-  'id': '',
-  'name': '',
-  'cpf': '',
-  'phone': '',
-  'balance': '',
-  'valid_until': '',
-  'notes': ''
-};
-
-const newFamily = ref({...emptyFamily});
-
-async function getFamilies(){
-
-  const savedFamilies = sessionStorage.getItem('mercado-solidario-families');
-
-  if (savedFamilies != null) {
-    families.value = JSON.parse(savedFamilies);
-  }
-  else {
-    const response = await get('/families');
-
-    if (response.status == 200){
-      families.value = response.data;
-      sessionStorage.setItem('mercado-solidario-families', JSON.stringify(response.data));
-    };
-
-  };
-
-};
-
-async function sendFamily(){
-  const request = {
-    'newFamily': newFamily.value
-  };
-
-  const response = await post('/families', request);
-
-  if (response.status == 200){
-
-    families.value.push({...response.data});
-
-    newFamily.value = {...emptyFamily};
-    sessionStorage.setItem('mercado-solidario-families', JSON.stringify(families.value));
-
-    showPopup('Sucesso', 'Enviou nova família');
-  } else {
-    showPopup('Erro', response.message);
-  };
-
-};
-
-async function deleteFamily(id){
-  const request = {
-    'id': id
-  };
-
-  const response = await del('/families', request);
-
-  if (response.status == 200){
-
-    for (const index in families.value) {
-      const family = families.value[index];
-      
-      if (family.id == id){
-        families.value.splice(index, 1);
-      };
-    };
-
-    sessionStorage.setItem('mercado-solidario-families', JSON.stringify(families.value));
-
-    showPopup('Sucesso', 'Família deletada');
-
-  } else {
-    showPopup('Erro', response.message);
-  };
-
-};
-
-function numericInput(evt){
-  const property = evt.target.name;
-  newFamily.value[property] = newFamily.value[property].replace(/[^0-9]/g,'');
-};
-
-function alphaNumericInput(evt){
-  const property = evt.target.name;
-  newFamily.value[property] = newFamily.value[property].replace(/[^a-z0-9]/gi,'').toUpperCase();
-};
-
-
-getFamilies();
+  import '../../css/global.css';
 </script>
 
 <template>
-  <div class="divPage">
+  <div class="app">
+    <nav class="borderRound">
+      <RouterLink to="/crud">Cadastro</RouterLink>
+      <RouterLink to="/queue">Fila mercado</RouterLink>
+    </nav>
 
-    <div class="divSubpage blackPage borderRound">
-
-      <h1>Nova família</h1>
-      <div>
-        <p>Nome</p>
-        <input v-model="newFamily.name" />
-        <p>CPF</p>
-        <input v-model="newFamily.cpf" name="cpf" @input="alphaNumericInput" />
-        <p>Telefone</p>
-        <input v-model="newFamily.phone" name="phone" @input="numericInput" />
-        <p>Saldo</p>
-        <input v-model="newFamily.balance" name="balance" @input="numericInput" />
-        <p>Válida até</p>
-        <input v-model="newFamily.valid_until" type="date" />
-        <p>Observações</p>
-        <textarea v-model="newFamily.notes" />
-        <p></p>
-        <button class="submitButton borderRound" @click="sendFamily()">Criar</button>
-      </div>
-
-    </div>
-
-    <div class="divSubpage blackPage borderRound">
-
-      <h1>Famílias atuais</h1>
-      <div v-for="family in families">
-        <p>
-          Responsável: {{ family.name }}
-        </p>
-        <p>
-          Saldo: {{ family.balance }}
-        </p>
-        <p>
-          Válida até: <input type="date"
-                        :value="family.valid_until"
-                        :min="family.valid_until" 
-                        :max="family.valid_until" />
-        </p>
-        <p>
-          Observações: {{ family.notes }}
-        </p>
-        <button class="submitButton borderRound" @click="deleteFamily(family.id)">Deletar</button>
-      </div>
-
-    </div>
+    <RouterView />
 
   </div>
 </template>
+
+<style scoped>
+.app {
+  display: flex;
+  flex-direction: column;
+}
+
+nav{
+  background-color:rgb(27, 134, 158);
+  width: 100%;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+}
+
+.router-link-exact-active {
+  color: #c61c8bd4;
+}
+</style>

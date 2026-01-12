@@ -30,6 +30,12 @@ class Families extends Base\Model {
 
     public function get( WP_REST_Request $request ): WP_REST_Response {
 
+        $cpf = $request->get_param('cpf');
+
+        if ($cpf) {
+            return $this->search_by_cpf($cpf);
+        };
+
         $today = current_time('Y-m-d');
 
         $query = new WP_Query([
@@ -40,7 +46,8 @@ class Families extends Base\Model {
                 [
                     'key'     => 'valid_until',
                     'value'   => $today,
-                    'compare' => '>='
+                    'compare' => '>=',
+                    'type'    => 'DATE'
                 ]
             ]
         ]);
@@ -71,12 +78,12 @@ class Families extends Base\Model {
         );
 
         $search = $this->search_by_cpf( $family->cpf );
-        if (is_array($search)){
+        if ($search->status == 200){
             return $this->error_response('Família já cadastrada');
         };
 
         $search = $this->search_by_phone( $family->phone );
-        if (is_array($search)){
+        if ($search->status == 200){
             return $this->error_response('Família já cadastrada');
         };
 
