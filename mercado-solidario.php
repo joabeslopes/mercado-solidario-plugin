@@ -6,7 +6,7 @@ Text Domain: mercado-solidario
 Requires Plugins: woocommerce
 Description: Mercado solidario
 Author: Joabe Lopes
-Version: 1.5
+Version: 1.6
 Author URI: https://sitejoabe.mooo.com
 Requires at least:    6.0
 Tested up to:         6.9
