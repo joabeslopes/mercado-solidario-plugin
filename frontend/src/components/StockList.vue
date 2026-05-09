@@ -11,7 +11,7 @@ const props = defineProps({
   <div class="divSubpage blackPage borderRound stock">
     <div v-for="(prod, sku) in stockObj.stock.value">
       <div :key="sku" class="prodImg" @click="stockObj.addProd(sku)">
-        <img :src="prod.image" :class="{'selected': stockObj.lastSku.value == sku, 'borderRound': true}" width="100px" height="100px">
+        <img :src="prod.image" :class="{'selected': stockObj.cart.value.productSku[sku], 'borderRound': true}" width="100px" height="100px">
         <p>{{prod.name}}</p>
       </div>
     </div>

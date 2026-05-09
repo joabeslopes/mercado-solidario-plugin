@@ -6,7 +6,6 @@ export default class stockManager {
 
   stock = ref({});
   cart = ref({});
-  lastSku = ref('');
   namesSearch = ref({});
 
   emptyCart = {
@@ -99,7 +98,6 @@ export default class stockManager {
       prod.quantity = this.getQuantity(sku) + 1;
     };
 
-    this.lastSku.value = sku;
     this.addSkuList(sku);
 
     this.updateCartTotal();
