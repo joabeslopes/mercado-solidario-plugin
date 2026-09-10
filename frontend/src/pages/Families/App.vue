@@ -6,7 +6,9 @@
   <div class="app">
     <nav class="borderRound">
       <RouterLink to="/crud">Cadastro</RouterLink>
-      <RouterLink to="/queue">Fila mercado</RouterLink>
+      <RouterLink to="/search">Pesquisa</RouterLink>
+      <RouterLink to="/dependant">Dependentes</RouterLink>
+      <RouterLink to="/relation">Relações</RouterLink>
     </nav>
 
     <RouterView />
@@ -30,5 +32,18 @@ nav{
 
 .router-link-exact-active {
   color: #c61c8bd4;
+}
+</style>
+
+<style>
+.subpageSearch {
+  flex: unset;
+  width: 40%;
+}
+
+@media (max-width: 768px) {
+    .subpageSearch{
+      width: 100%;
+    }
 }
 </style>

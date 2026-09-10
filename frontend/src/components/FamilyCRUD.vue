@@ -1,155 +1,106 @@
 <script setup>
-import '../css/global.css';
-import { ref } from 'vue';
-import { get, post, del } from '../js/myApiClient';
-import showPopup from '../js/myPopup';
+import { ref, defineEmits, defineProps, watch } from 'vue';
+import InputText from 'primevue/inputtext';
+import InputMask from 'primevue/inputmask';
+import Select from 'primevue/select';
+import Textarea from 'primevue/textarea';
+import Button from 'primevue/button';
+import InputNumber from 'primevue/inputnumber';
 
-const families = ref([]);
+const props = defineProps(['family', 'action_name']);
+const emit = defineEmits(['send', 'update:family']);
 
-const emptyFamily = {
-  'id': '',
-  'name': '',
-  'cpf': '',
-  'phone': '',
-  'balance': 0,
-  'valid_until': '',
-  'notes': ''
-};
+const newFamily = ref({...props.family});
 
-const newFamily = ref({...emptyFamily});
-
-async function getFamilies(){
-
-  const savedFamilies = sessionStorage.getItem('mercado-solidario-families');
-
-  if (savedFamilies != null) {
-    families.value = JSON.parse(savedFamilies);
+// Watch for prop changes to update the internal ref
+watch(() => props.family, (newValue) => {
+  const currentStr = JSON.stringify(newFamily.value);
+  const newStr = JSON.stringify(newValue);
+  if (currentStr !== newStr) {
+    newFamily.value = {...newValue};
   }
-  else {
-    const response = await get('/families');
+}, { deep: true, immediate: true });
 
-    if (response.status == 200){
-      families.value = response.data;
-      sessionStorage.setItem('mercado-solidario-families', JSON.stringify(response.data));
-    };
+// Emit internal changes to parent
+watch(newFamily, (newValue) => {
+  emit('update:family', newValue);
+}, { deep: true });
 
-  };
+const periods = ref([
+    { label: '1 (Janeiro a Junho)', value: 1 },
+    { label: '2 (Julho a Dezembro)', value: 2 },
+    { label: 'Todos', value: '' }
+]);
 
-};
-
-async function sendFamily(){
-  const request = {
-    'newFamily': newFamily.value
-  };
-
-  const response = await post('/families', request);
-
-  if (response.status == 200){
-
-    families.value.push({...response.data});
-
-    newFamily.value = {...emptyFamily};
-    sessionStorage.setItem('mercado-solidario-families', JSON.stringify(families.value));
-
-    showPopup('Sucesso', 'Enviou nova família');
-  } else {
-    showPopup('Erro', response.message);
-  };
-
-};
-
-async function deleteFamily(id){
-  const request = {
-    'id': id
-  };
-
-  const response = await del('/families', request);
-
-  if (response.status == 200){
-
-    for (const index in families.value) {
-      const family = families.value[index];
-      
-      if (family.id == id){
-        families.value.splice(index, 1);
-      };
-    };
-
-    sessionStorage.setItem('mercado-solidario-families', JSON.stringify(families.value));
-
-    showPopup('Sucesso', 'Família deletada');
-
-  } else {
-    showPopup('Erro', response.message);
-  };
-
-};
-
-function numericInput(evt){
-  const property = evt.target.name;
-  newFamily.value[property] = newFamily.value[property].replace(/[^0-9]/g,'');
-};
-
-function alphaNumericInput(evt){
-  const property = evt.target.name;
-  newFamily.value[property] = newFamily.value[property].replace(/[^a-z0-9]/gi,'').toUpperCase();
-};
-
-
-getFamilies();
 </script>
 
 <template>
-  <div class="divPage">
 
-    <div class="divSubpage blackPage borderRound">
+  <div class="divSubpage borderRound fullWidth">
 
-      <h1>Nova família</h1>
-      <div>
+    <div class="field fullWidth">
         <p>Nome responsável</p>
-        <input v-model="newFamily.name" />
+        <InputText v-model="newFamily.name" class="fullWidth" />
+    </div>
+
+    <div class="field fullWidth">
+        <p>Ano</p>
+        <InputNumber v-model="newFamily.year" :useGrouping="false" class="fullWidth" />
+    </div>
+
+    <div class="field fullWidth">
+        <p>Período</p>
+        <Select v-model="newFamily.period" :options="periods" optionLabel="label" optionValue="value" placeholder="Selecione o período" class="fullWidth" />
+    </div>
+
+    <div class="field fullWidth">
         <p>CPF</p>
-        <input v-model="newFamily.cpf" name="cpf" @input="alphaNumericInput" />
+        <InputMask v-model="newFamily.cpf" mask="***.***.***-99" class="fullWidth" />
+    </div>
+
+    <div class="field fullWidth">
         <p>Telefone</p>
-        <input v-model="newFamily.phone" name="phone" @input="numericInput" />
-        <p>Saldo por compra</p>
-        <input v-model="newFamily.balance" name="balance" @input="numericInput" />
-        <p>Válida até</p>
-        <input v-model="newFamily.valid_until" type="date" />
+        <InputMask v-model="newFamily.phone" mask="(99) 99999-9999" class="fullWidth" />
+    </div>
+
+    <div class="field fullWidth">
+        <p>Data de Nascimento</p>
+        <InputMask v-model="newFamily.birth_date" mask="99/99/9999" placeholder="Ex: 01/12/1999" class="fullWidth" />
+    </div>
+
+    <div class="field fullWidth">
+        <p>CEP</p>
+        <InputMask v-model="newFamily.addr_cep" mask="99999-999" class="fullWidth" />
+    </div>
+
+    <div class="field fullWidth">
+        <p>Número da casa</p>
+        <InputNumber v-model="newFamily.addr_number" :useGrouping="false" class="fullWidth" />
+    </div>
+
+    <div class="field fullWidth">
+        <p>Complemento do endereço</p>
+        <InputText v-model="newFamily.addr_compl" class="fullWidth" />
+    </div>
+
+    <div class="field fullWidth">
         <p>Observações</p>
-        <textarea v-model="newFamily.notes" />
-        <p></p>
-        <button class="submitButton borderRound" @click="sendFamily()">Criar</button>
-      </div>
-
+        <Textarea v-model="newFamily.notes" rows="3" class="fullWidth" />
     </div>
 
-    <div class="divSubpage blackPage borderRound">
-
-      <h1>Famílias atuais</h1>
-      <div v-for="family in families">
-        <p>
-          Nome responsável: {{ family.name }}
-        </p>
-        <p>
-          CPF: {{ family.cpf }}
-        </p>
-        <p>
-          Saldo por compra: {{ family.balance }}
-        </p>
-        <p>
-          Válida até: <input type="date"
-                        :value="family.valid_until"
-                        :min="family.valid_until" 
-                        :max="family.valid_until" />
-        </p>
-        <p>
-          Observações: {{ family.notes }}
-        </p>
-        <button class="submitButton borderRound" @click="deleteFamily(family.id)">Deletar</button>
-      </div>
-
-    </div>
+    <p></p>
+    <Button v-if="props.action_name" :label="props.action_name" @click="emit('send', newFamily)" class="submitButton borderRound familyActionButton" />
 
   </div>
+
 </template>
+
+<style scoped>
+  .field {
+    margin-bottom: 1rem;
+  }
+
+  .familyActionButton{
+    width: 15%;
+  }
+</style>

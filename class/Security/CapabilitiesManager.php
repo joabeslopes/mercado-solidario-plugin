@@ -20,6 +20,9 @@ class CapabilitiesManager {
     public static string $stock = 'ms_stock';
     public static string $supplier = 'ms_supplier';
     public static string $reports = 'ms_reports';
+    public static string $entity = 'ms_entity';
+    public static string $entityperson = 'ms_entity_person';
+    public static string $familydependant = 'ms_family_dependant';
 
     public array $caps = [];
 
@@ -49,7 +52,10 @@ class CapabilitiesManager {
             ],
             'families' => [
                 self::$default,
-                self::$families
+                self::$families,
+                self::$entity,
+                self::$entityperson,
+                self::$familydependant
             ],
             'admin' => [
                 self::$default,
@@ -58,7 +64,10 @@ class CapabilitiesManager {
                 self::$families,
                 self::$stock,
                 self::$supplier,
-                self::$reports
+                self::$reports,
+                self::$entity,
+                self::$entityperson,
+                self::$familydependant
             ]
         ];
 

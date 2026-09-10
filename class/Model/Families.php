@@ -12,7 +12,11 @@ defined( 'ABSPATH' ) || die;
 
 class Families extends Base\Model {
 
-    private function search_family(WP_Query $query): ?array {
+    private function search_family(WP_Query | null $query): ?array {
+
+        if ($query === null){
+            return null;
+        };
 
         if ($query->have_posts()) {
             $result = [];
@@ -28,36 +32,75 @@ class Families extends Base\Model {
         };
     }
 
-    public function get( WP_REST_Request $request ): WP_REST_Response {
-
-        $cpf = $request->get_param('cpf');
-
-        if ($cpf) {
-            return $this->search_by_cpf($cpf);
+    public function build_query(array $search, $relation = 'AND'): ?WP_Query {
+        if (empty($search)){
+            return null;
         };
 
-        $today = current_time('Y-m-d');
+        $args = [];
 
-        $query = new WP_Query([
-            'post_type'      => Controller\Families::$post_type,
-            'posts_per_page' => -1, // All results
-            'post_status'    => 'publish',
-            'meta_query'     => [
-                [
-                    'key'     => 'valid_until',
-                    'value'   => $today,
-                    'compare' => '>=',
-                    'type'    => 'DATE'
+        foreach ($search as $field_name => $value) {
+
+            if ( $value === null || $value === '') continue;
+
+            match ($field_name) {
+                'id'   => $args['p'] = intval($value),
+
+                'name' => $args['s'] = sanitize_text_field($value),
+
+                default => $args['meta_query'][] = [
+                    'key'     => $field_name,
+                    'value'   => sanitize_text_field($value),
+                    'compare' => '='
                 ]
-            ]
-        ]);
+            };
+        };
 
-        $families = $this->search_family($query);
+        if (!empty($args['meta_query'])){
+            $args['meta_query']['relation'] = $relation;
+        };
+
+        if (empty($args)){
+            return null;
+        } else {
+            $args['post_type'] = Controller\Families::$post_type;
+            $args['posts_per_page'] = -1;
+            $args['post_status'] = 'publish';
+
+            return new WP_Query($args);
+        };
+    }
+
+    private function build_search_array( WP_REST_Request $request ): array {
+        $family = new Family();
+        $attributes = $family->get_attributes();
+        $search = [];
+
+        foreach ($attributes as $field_name) {
+            $value = $request->get_param($field_name);
+
+            if ( $value === null || $value === '') continue;
+
+            $search[$field_name] = $value;
+        };
+
+        return $search;
+    }
+
+    public function get( WP_REST_Request $request ): WP_REST_Response {
+
+        $search = $this->build_search_array($request);
+
+        if (empty($search)){
+            return $this->error_response('Dados inválidos', 400);
+        };
+
+        $families = $this->search_family($this->build_query($search) );
 
         if ($families) {
             return $this->success_response($families);
         } else {
-            return $this->error_response('Nenhuma familia encontrada');
+            return $this->error_response('Nenhuma familia encontrada', 404);
         };
     }
 
@@ -65,25 +108,31 @@ class Families extends Base\Model {
         $new_family = $request['newFamily'];
 
         if(!$new_family){
-            return $this->error_response('Faltou enviar a nova familia');
+            return $this->error_response('Dados inválidos', 400);
         };
 
-        $family = new Family(
-            name: $new_family['name'],
-            cpf: $new_family['cpf'],
-            phone: $new_family['phone'],
-            balance: $new_family['balance'],
-            valid_until: $new_family['valid_until'],
-            notes: $new_family['notes']
-        );
+        $family = new Family();
 
-        $search = $this->search_by_cpf( $family->cpf );
-        if ($search->status == 200){
+        $family->fill_from_array($new_family);
+
+        // Pesquisa por dados pessoais
+        $search = [
+            'cpf' => $family->cpf,
+            'phone' => $family->phone
+        ];
+        $existing_family = $this->search_family( $this->build_query($search, 'OR') );
+        if ($existing_family){
             return $this->error_response('Família já cadastrada');
         };
 
-        $search = $this->search_by_phone( $family->phone );
-        if ($search->status == 200){
+        // Pesquisa por endereço completo
+        $search = [
+            'addr_cep' => $family->addr_cep,
+            'addr_number' => $family->addr_number,
+            'addr_compl' => $family->addr_compl,
+        ];
+        $existing_family = $this->search_family( $this->build_query($search) );
+        if ($existing_family){
             return $this->error_response('Família já cadastrada');
         };
 
@@ -98,7 +147,7 @@ class Families extends Base\Model {
         $family_id = $request['id'];
 
         if(!$family_id){
-            return $this->error_response('Faltou informar a família');
+            return $this->error_response('Faltou informar a família', 400);
         };
 
         $response = wp_delete_post( $family_id, true );
@@ -107,72 +156,31 @@ class Families extends Base\Model {
             return $this->success_response();
         } else {
             return $this->error_response('Não foi possível deletar');
-        }
-
-    }
-
-    public function search_by_cpf(string $cpf) {
-        $query = new WP_Query([
-            'post_type'      => Controller\Families::$post_type,
-            'posts_per_page' => 1,
-            'post_status'    => 'publish',
-            'meta_query'     => [
-                [
-                    'key'     => 'cpf',
-                    'value'   => $cpf,
-                    'compare' => '='
-                ]
-            ]
-        ]);
-
-        $families = $this->search_family($query);
-
-        if ($families) {
-            return $this->success_response($families);
-        } else {
-            return $this->error_response('Nenhuma familia encontrada');
         };
 
     }
 
-    public function search_by_phone(string $phone) {
-        $query = new WP_Query([
-            'post_type'      => Controller\Families::$post_type,
-            'posts_per_page' => 1,
-            'post_status'    => 'publish',
-            'meta_query'     => [
-                [
-                    'key'     => 'phone',
-                    'value'   => $phone,
-                    'compare' => '='
-                ]
-            ]
-        ]);
+    public function put( WP_REST_Request $request ): WP_REST_Response {
+        $updated_family = $request['updatedFamily'];
 
-        $families = $this->search_family($query);
-
-        if ($families) {
-            return $this->success_response($families);
-        } else {
-            return $this->error_response('Nenhuma familia encontrada');
+        if(!$updated_family){
+            return $this->error_response('Dados inválidos', 400);
         };
-    }
 
-    public function search_by_id(int $post_id){
+        $post = get_post($updated_family['id']);
 
-        $query = new WP_Query([
-            'post_type'      => Controller\Families::$post_type,
-            'posts_per_page' => 1,
-            'post_status'    => 'publish',
-            'p'              => $post_id
-        ]);
+        if($post == null){
+            return $this->error_response('Dados inválidos', 400);
+        };
 
-        $families = $this->search_family($query);
+        $family = Family::build_from_post($post);
 
-        if ($families) {
-            return $this->success_response($families);
+        $family->fill_from_array($updated_family);
+
+        if ( $family->save() ){
+            return $this->success_response($family);
         } else {
-            return $this->error_response('Nenhuma familia encontrada');
+            return $this->error_response('Não foi possível salvar');
         };
     }
 

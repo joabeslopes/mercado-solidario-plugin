@@ -3,29 +3,34 @@
 namespace Mercado_Solidario\Controller;
 use Mercado_Solidario\Model;
 use Mercado_Solidario\Base;
+use Mercado_Solidario\Pages;
 
 // don't call the file directly
 defined( 'ABSPATH' ) || die;
 
-class Families extends Base\Controller{
+class Entity extends Base\Controller{
 
-    public static string $post_type = MERCADO_SOLIDARIO_POST_PREFIX.'family';
+    public static string $post_type = MERCADO_SOLIDARIO_POST_PREFIX.'entity';
 
     public function __construct(){
 
-        $this->model = new Model\Families();
-
+        $this->model = new Model\Entity();
         add_action('init', [$this, 'load_post_type']);
         $this->register('get');
         $this->register('post');
         $this->register('delete');
-        $this->register('put');
     }
 
     public function load_post_type(){
         register_post_type(self::$post_type, [
-            'public' => false
+            'public' => false,
+            'show_ui' => true,
+            'supports' => ['title', 'custom-fields'],
+            'show_in_menu' => Pages\Main_Page::$menu_slug,
+            'labels' => [
+                'name' => 'Entidades'
+            ]
         ]);
     }
 
-};
+}
