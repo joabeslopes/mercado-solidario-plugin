@@ -1,16 +1,13 @@
 {
   "name": "mercado-solidario",
   "private": true,
-  "version": "1.6",
+  "version": "1.7",
   "type": "module",
   "scripts": {
     "dev": "vite build --watch",
     "build": "vite build"
   },
   "dependencies": {
-    "@primevue/themes": "^4.5.4",
-    "primeicons": "^7.0.0",
-    "primevue": "^4.5.5",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0"
   },
