@@ -12,7 +12,6 @@ class Stock extends Base\Controller{
     public function __construct(){
 
         $this->model = new Model\Stock();
-        $this->base_route = 'stock';
 
         $this->register('get');
     }

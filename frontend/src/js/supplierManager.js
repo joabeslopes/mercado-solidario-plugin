@@ -23,7 +23,7 @@ export default class supplierManager {
 
       const response = await get('/supplier');
 
-      if (response.status == 200){
+      if (response.ok){
         this.allSuppliers.value = response.data;
         this.saveAll();
       };

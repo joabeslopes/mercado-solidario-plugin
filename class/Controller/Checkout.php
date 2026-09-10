@@ -12,8 +12,6 @@ class Checkout extends Base\Controller{
     public function __construct(){
 
         $this->model = new Model\Checkout();
-        $this->base_route = 'checkout';
-
         $this->register('post');
     }
 

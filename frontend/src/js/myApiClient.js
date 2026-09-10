@@ -98,3 +98,21 @@ export async function del(path, requestObj) {
 
     return response;
 };
+
+export async function put(path, requestObj) {
+
+    const apiResponse = await fetch(apiNamespace + path,
+        {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "X-WP-Nonce": nonce
+            },
+            body: JSON.stringify(requestObj)
+        }
+    );
+
+    const response = await createMyResponse(apiResponse);
+
+    return response;
+};

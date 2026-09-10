@@ -1,12 +1,7 @@
 .divPage {
     display: flex;
-    gap: 90px;
-}
-
-@media (max-width: 768px) {
-    .divPage{
-        flex-direction: column;
-    }
+    gap: 20px;
+    width: 100%;
 }
 
 a {
@@ -43,6 +38,7 @@ a:focus {
     flex: 1;
     flex-flow: column;
     align-items: center;
+    min-width: 0;
 }
 
 .miniSubPage {
@@ -59,11 +55,30 @@ a:focus {
     padding: 20px;
 }
 
-.blackPage > h1 {
+.blackPage > h1, h2, h3, h4, h5, h6 {
     color: white;
 }
 
 .borderRound {
     box-sizing: border-box;
     border-radius: 12px;
+}
+
+.fullWidth {
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    .divPage {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .familyActionButton, .submitButton, .masterActionButton {
+        width: 100% !important;
+    }
+
+    .blackPage {
+        padding: 10px;
+    }
 }

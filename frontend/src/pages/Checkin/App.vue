@@ -7,7 +7,7 @@ import supplierManager from '../../js/supplierManager';
 import stockManager from '../../js/stockManager';
 import CartList from '../../components/CartList.vue';
 import StockList from '../../components/StockList.vue';
-import SearchSupplier from '../../components/SearchSupplier.vue';
+import SupplierSearch from '../../components/SupplierSearch.vue';
 import Loading from '../../components/Loading.vue';
 
 const stockObj = new stockManager('checkin');
@@ -50,7 +50,7 @@ async function sendCart(){
 
   const response = await post( '/checkin', request );
 
-  if (response.status == 200) {
+  if (response.ok) {
     showPopup("Sucesso", "Estoque abastecido");
     stockObj.clearCart();
   } else {
@@ -74,7 +74,7 @@ async function sendCart(){
     <StockList class="stock" :stockObj="stockObj" />
 
     <div class="wrapper">
-      <SearchSupplier class="search" :supplierObj="supplierObj" />
+      <SupplierSearch class="search" :supplierObj="supplierObj" />
 
       <div class="dados miniSubPage blackPage borderRound">
         <p>Data de criação</p>

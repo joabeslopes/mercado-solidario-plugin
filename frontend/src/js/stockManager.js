@@ -31,7 +31,7 @@ export default class stockManager {
 
       const response = await get('/stock');
 
-      if (response.status == 200){
+      if (response.ok){
         this.stock.value = response.data;
         sessionStorage.setItem(this.stockSessionStorage, JSON.stringify(response.data));
       } else {

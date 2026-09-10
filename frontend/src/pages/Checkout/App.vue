@@ -30,7 +30,7 @@ async function sendCart(){
 
   const response = await post( '/checkout', request );
 
-  if (response.status == 200) {
+  if (response.ok) {
     showPopup("Sucesso", "Compra efetuada");
     stockObj.clearCart();
   } else {

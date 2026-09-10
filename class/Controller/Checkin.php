@@ -10,12 +10,11 @@ defined( 'ABSPATH' ) || die;
 
 class Checkin extends Base\Controller{
 
+    public static string $post_type = MERCADO_SOLIDARIO_POST_PREFIX.'checkin';
+
     public function __construct(){
 
         $this->model = new Model\Checkin();
-        $this->base_route = 'checkin';
-        self::$post_type = MERCADO_SOLIDARIO_POST_PREFIX.'checkin';
-
         add_action('init', [$this, 'load_post_type']);
         $this->register('post');
     }

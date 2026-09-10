@@ -15,7 +15,6 @@ class Supplier extends Base\Controller{
     public function __construct(){
 
         $this->model = new Model\Supplier();
-        $this->base_route = 'supplier';
 
         add_action('init', [$this, 'load_post_type']);
         $this->register('get');
