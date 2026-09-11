@@ -1,7 +1,7 @@
 {
   "name": "mercado-solidario",
   "private": true,
-  "version": "1.7",
+  "version": "1.8",
   "type": "module",
   "scripts": {
     "dev": "vite build --watch",

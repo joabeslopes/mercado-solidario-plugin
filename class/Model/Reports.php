@@ -52,7 +52,7 @@ class Reports extends Base\Model {
         return $this->success_response($categories);
     }
 
-    private function get_checkin_report($start_date, $end_date, $product_id, $category_id) {
+    private function get_checkin_report($start_date, $end_date, $product_id, $category_id): array {
         if (empty($start_date)) {
             return [];
         }
@@ -133,7 +133,7 @@ class Reports extends Base\Model {
         return $aggregated;
     }
 
-    private function get_checkout_report($start_date, $end_date, $product_id, $category_id) {
+    private function get_checkout_report($start_date, $end_date, $product_id, $category_id): array {
         if (empty($start_date)) {
             return [];
         }

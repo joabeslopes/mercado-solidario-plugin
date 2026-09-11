@@ -83,7 +83,7 @@ onMounted(() => {
 
 <template>
   <div class="divPage report">
-    <!-- Split Div 1: Filters -->
+    <!-- Filters -->
     <div class="filter-container blackPage borderRound">
       <h3>Filtros de Relatório</h3>
       
@@ -130,7 +130,7 @@ onMounted(() => {
       </div>
     </div>
 
-    <!-- Split Div 2: Results -->
+    <!-- Results -->
     <div class="result-container blackPage borderRound">
       <div v-if="loading" class="loading-wrapper">
         <Loading />
