@@ -38,6 +38,7 @@ class Main_Page {
         new Families();
         new Checkout();
         new Checkin();
+        new Reports();
 
     }
 

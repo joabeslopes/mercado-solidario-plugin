@@ -19,6 +19,7 @@ class CapabilitiesManager {
     public static string $default = 'ms_default';
     public static string $stock = 'ms_stock';
     public static string $supplier = 'ms_supplier';
+    public static string $reports = 'ms_reports';
 
     public array $caps = [];
 
@@ -56,7 +57,8 @@ class CapabilitiesManager {
                 self::$checkout,
                 self::$families,
                 self::$stock,
-                self::$supplier
+                self::$supplier,
+                self::$reports
             ]
         ];
 
